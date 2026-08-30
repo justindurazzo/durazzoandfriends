@@ -50,7 +50,7 @@
 
   /* ---- the ad box ---------------------------------------------------- */
   .rulebox{
-    position:absolute; inset:30px;
+    position:absolute; inset:30px; overflow:hidden;   /* the loaf bleeds to the rule */
     border:9px solid var(--ink);
     box-shadow: inset 0 0 0 5px var(--paper), inset 0 0 0 7px var(--ink);
     padding:34px 50px 30px;
@@ -97,17 +97,19 @@
     flex:1 1 auto; min-height:0;
     display:grid; grid-template-columns:1fr 2px 316px;
     column-gap:28px; align-items:stretch;
-    margin-top:16px;
+    margin-top:12px;
   }
   .main .gutter{ background:var(--ink); opacity:.5; }
 
   .plate{ position:relative; min-width:0; }
-  .loaf{
-    position:absolute; inset:0;
-    -webkit-mask-image:var(--loaf);      mask-image:var(--loaf);
-    -webkit-mask-size:contain;           mask-size:contain;
-    -webkit-mask-repeat:no-repeat;       mask-repeat:no-repeat;
-    -webkit-mask-position:center bottom; mask-position:center bottom;
+  .loaf{                                      /* hard-cropped close-up: the cut end reads
+                                                 large, and the crop runs off to the rule
+                                                 rather than floating in the column */
+    position:absolute; top:-12px; bottom:0; right:0; left:-50px;
+    -webkit-mask-image:var(--loaf);       mask-image:var(--loaf);
+    -webkit-mask-size:contain;            mask-size:contain;
+    -webkit-mask-repeat:no-repeat;        mask-repeat:no-repeat;
+    -webkit-mask-position:left top;       mask-position:left top;
     background:var(--loaf-ink);
   }
   .burst{                                     /* period oval, set on the angle */
@@ -224,7 +226,7 @@
 
         <div class="side">
           <p><span class="lead">Squared off and pan-baked,</span> turned out with a top
-             that crackles under the thumb. The crumb runs open and creamy end to end
+             that crackles under the thumb. The crumb is close and tender end to end
              &mdash; the kind of slice that takes butter, then asks for a second.</p>
           <div class="tick"></div>
           <p>Cut it thick for toast. Cut it thin for a sandwich. It sops a sauce, holds
@@ -232,8 +234,8 @@
           <div class="tick"></div>
           <div class="spec">
             <span><i></i>Pan-baked daily</span>
-            <span><i></i>Open, creamy crumb</span>
-            <span><i></i>Thin, shattering crust</span>
+            <span><i></i>Close, tender crumb</span>
+            <span><i></i>Crackling top crust</span>
           </div>
           <div class="closer">Cut it thick.<br>Eat it warm.</div>
         </div>

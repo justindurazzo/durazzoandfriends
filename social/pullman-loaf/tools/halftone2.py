@@ -6,8 +6,10 @@ CELL = float(sys.argv[4]) if len(sys.argv)>4 else 23.0
 ANG = np.deg2rad(45)
 LO, HI, GAM = float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3])
 
-src  = Image.open('loaf_src.png')
-mask = Image.open('loaf_mask_clean.png').convert('L')
+import os
+SRC = os.environ.get('HT_SRC','loaf_src.png'); MSK = os.environ.get('HT_MSK','loaf_mask_clean.png')
+src  = Image.open(SRC)
+mask = Image.open(MSK).convert('L')
 
 gray = ImageOps.grayscale(src)
 gray = gray.filter(ImageFilter.UnsharpMask(radius=6, percent=110, threshold=2))
@@ -50,7 +52,7 @@ out = out.resize((W,h), Image.LANCZOS)
 a = np.array(out); ys,xs = np.where(a>10)
 box = (max(0,xs.min()-16), max(0,ys.min()-16), min(W,xs.max()+16), min(h,ys.max()+16))
 rgba = Image.merge('RGBA', [Image.new('L', out.size, 0)]*3+[out]).crop(box)
-rgba.save('loaf_halftone.png', optimize=True)
+rgba.save(os.environ.get('HT_OUT','loaf_halftone.png'), optimize=True)
 bg = Image.new('RGB', rgba.size, '#EDE4D0'); bg.paste(Image.new('RGB',rgba.size,'#1B2A5E'),(0,0),rgba)
 bg.resize((rgba.width//3, rgba.height//3)).save('halftone_preview.png')
 print('dots',n,'size',rgba.size,'bytes',os.path.getsize('loaf_halftone.png'),'mean ink',round(1-t[t<1].mean(),3))
