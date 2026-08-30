@@ -70,17 +70,17 @@
 
   /* ---- headline stack ------------------------------------------------ */
   .hero{ flex:none; text-align:center; padding-top:14px;
-         padding-bottom:18px; border-bottom:2px solid var(--ink); }
+         padding-bottom:15px; border-bottom:2px solid var(--ink); }
   .hero .kicker{
     font-family:"Oswald","Arial Narrow",sans-serif;
-    font-weight:600; font-size:41px; line-height:1;
+    font-weight:600; font-size:38px; line-height:1;
     letter-spacing:.30em; text-indent:.30em;   /* indent re-centres the tracking */
     text-transform:uppercase;
   }
   .hero .since{
     position:relative; margin:-6px 0 -10px;
     font-family:"Pinyon Script","Snell Roundhand",cursive;
-    font-size:126px; line-height:.72; color:var(--brand);
+    font-size:118px; line-height:.72; color:var(--brand);
   }
   .hero .since::before{                       /* navy plate, slipped on press */
     content:"since"; position:absolute; inset:0; z-index:-1;
@@ -88,28 +88,26 @@
   }
   .hero .shout{
     font-family:"Ultra","Rockwell",Georgia,serif;
-    font-size:93px; line-height:.94; letter-spacing:-.018em;
+    font-size:89px; line-height:.94; letter-spacing:-.018em;
     text-shadow:0 0 1.2px var(--ink);          /* ink squeeze off the plate */
   }
 
   /* ---- product / copy block ------------------------------------------ */
   .main{
     flex:1 1 auto; min-height:0;
-    display:grid; grid-template-columns:1fr 2px 316px;
-    column-gap:28px; align-items:stretch;
-    margin-top:12px;
+    display:grid; grid-template-columns:1fr 2px 288px;
+    column-gap:24px; align-items:stretch;
+    margin-top:16px;
   }
   .main .gutter{ background:var(--ink); opacity:.5; }
 
   .plate{ position:relative; min-width:0; }
-  .loaf{                                      /* hard-cropped close-up: the cut end reads
-                                                 large, and the crop runs off to the rule
-                                                 rather than floating in the column */
-    position:absolute; top:-12px; bottom:0; right:0; left:-50px;
+  .loaf{
+    position:absolute; inset:0;
     -webkit-mask-image:var(--loaf);       mask-image:var(--loaf);
     -webkit-mask-size:contain;            mask-size:contain;
     -webkit-mask-repeat:no-repeat;        mask-repeat:no-repeat;
-    -webkit-mask-position:left top;       mask-position:left top;
+    -webkit-mask-position:center bottom;  mask-position:center bottom;
     background:var(--loaf-ink);
   }
   .burst{                                     /* period oval, set on the angle */
@@ -150,7 +148,7 @@
     padding:16px 0 2px;
     border-top:2px solid var(--ink);
     font-family:"Libre Baskerville",Georgia,serif;
-    font-style:italic; font-size:23px; line-height:1.4;
+    font-style:italic; font-size:22px; line-height:1.4;
     text-align:center; color:var(--ink);
   }
 
@@ -226,7 +224,7 @@
 
         <div class="side">
           <p><span class="lead">Squared off and pan-baked,</span> turned out with a top
-             that crackles under the thumb. The crumb is close and tender end to end
+             that crackles under the thumb. The crumb runs open and creamy end to end
              &mdash; the kind of slice that takes butter, then asks for a second.</p>
           <div class="tick"></div>
           <p>Cut it thick for toast. Cut it thin for a sandwich. It sops a sauce, holds
@@ -234,7 +232,7 @@
           <div class="tick"></div>
           <div class="spec">
             <span><i></i>Pan-baked daily</span>
-            <span><i></i>Close, tender crumb</span>
+            <span><i></i>Open, creamy crumb</span>
             <span><i></i>Crackling top crust</span>
           </div>
           <div class="closer">Cut it thick.<br>Eat it warm.</div>

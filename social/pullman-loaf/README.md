@@ -21,10 +21,10 @@ Two colourways, same layout:
 | `ff-pullman-post*.html` | Self-contained sources. Fonts, halftone and mark all inlined; open offline. |
 | `assets/ff-mark.svg` | The F&F script mark, from the master artwork. Fills with `currentColor`. |
 | `assets/ff-script-logo.pdf` | The master logo file (navy / black / white artboards). |
-| `assets/pullman-photo.png` | The source photograph of the baked loaf. |
-| `assets/loaf-plate.png` | The regraded illustration plate the screen is made from. |
+| `assets/loaf-photo.png` | The source photograph — the loaf pictured in the posts. |
 | `assets/loaf-halftone.png` | The loaf as a 45° halftone screen, alpha only — tint with CSS `mask-image`. |
 | `assets/loaf-halftone-dense.png` | A denser screen. Blue ink carries less optical weight than black, so the one-colour version uses this. |
+| `assets/pullman-uncut-photo.png` | The uncut loaf on the cutting board. Not used — kept for reference. |
 
 ## Design
 
@@ -36,51 +36,45 @@ light tint of the single ink, reading as ink spread rather than mis-register.
 
 ## The loaf
 
-The loaf is the actual baked Pullman (`assets/pullman-photo.png`), keyed off
-the cutting board and screened at 45° so it reads as period newsprint.
+The loaf is photographed already cut, so the crumb in the posts is the real
+crumb — nothing is constructed. The whole job is keying the loaf off the blue
+seamless (`tools/loaf3_build.py`) and screening it at 45°.
 
-Two things had to be built rather than photographed, both in `tools/loaf2_build.py`:
+The one real adjustment is shadow flattening. The photograph is lit hard from
+the right, so the loaf's left flank falls to about a fifth of the brightness of
+the cut face. In colour that reads as form; in a single-ink halftone it
+collapses into a solid black mass and the loaf loses its shape. The screen
+therefore runs a homomorphic flatten at 0.72, which opens the shaded flank
+while keeping the local texture that makes the crust and crumb legible.
 
-**The cut end.** The photograph is of an uncut loaf, so the end face is
-constructed: the heel's interior is replaced with a generated crumb, inset to
-leave a crust rim, and lit by the photograph's own light field so it sits in
-the same light. The crumb is deliberately fine and even — a pain de mie, not
-the open crumb of the rustic loaf that was here before. At an 11px screen a
-1–3mm alveolus is smaller than one halftone cell, so the crumb reads as
-subtle tone rather than visible holes. That is what a sandwich loaf actually
-looked like in period newsprint.
-
-**The tonal grade.** In the photograph the lit plane is the brown top crust
-and the shaded plane is the pale end. Strip the colour for a one-ink screen
-and those two swap roles, collapsing the loaf into a single dark slab. So
-each plane is regraded to its own tone — dark top crust, mid crust rim, light
-cut face — with the photograph's texture laid back over it, and the crust
-modelled lighter as it recedes. The crust rim is also widened past life size:
-a 4mm rim is sub-screen at final size and would simply vanish. All of this is
-ordinary engraver's practice for one-colour reproduction.
+`tools/loaf2_build.py` is an earlier pipeline for the uncut cutting-board loaf,
+which had to construct a cut face and regrade the loaf plane by plane. It is no
+longer used — this photograph needs neither — but it is kept in case that loaf
+comes back.
 
 ## Re-rendering
 
 Edit copy or layout in `tools/post.tpl.html` — one template drives both
-colourways; the palettes live in `tools/build.py`.
+colourways; the palettes and titles live in `tools/build.py`.
 
 ```sh
 cd tools
+python3 loaf3_build.py ../assets/loaf-photo.png   # cutout + mask
+HT_SRC=loaf3_src.png HT_MSK=loaf3_mask.png HT_OUT=screen.png \
+  python3 halftone2.py 0.24 1.00 0.90 11 0.72     # LO HI GAMMA CELL FLATTEN
 python3 build.py duo  ../ff-pullman-post.html
 python3 build.py blue ../ff-pullman-post-blue.html
 python3 shot.py ../ff-pullman-post.html out@2x.png preview.png
 ```
 
-`loaf2_build.py` rebuilds the cutout, the cut face and the tonal plate from
-the source photograph. `halftone2.py LO HI GAMMA CELL FLATTEN` then screens it
-— lower `LO` for a denser loaf, smaller `CELL` for a finer screen; it reads
-`HT_SRC`, `HT_MSK` and `HT_OUT` from the environment.
+Lower `LO` for a denser loaf, smaller `CELL` for a finer screen, higher
+`FLATTEN` to open the shadow side further.
 
 ## Copy worth checking before it goes out
 
 - "Pan-baked daily" — swap if the bake isn't every day.
 - "Baked in house" — the oval callout.
-- The body copy and the spec list describe this loaf: close tender crumb,
-  crackling top crust. They are written to the photograph, not a spec sheet.
-- The cut face is constructed, not photographed. If you send a photo of the
-  loaf actually cut, it drops straight in and the construction comes out.
+- The body copy and the spec list describe the loaf in `assets/loaf-photo.png`:
+  open creamy crumb, crackling top crust. They are written to the photograph,
+  not a spec sheet. If the post should show the tighter pain de mie instead,
+  the crumb wording has to change with it.
