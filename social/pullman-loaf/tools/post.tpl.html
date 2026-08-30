@@ -69,7 +69,7 @@
   .eyebrow .lozenge{ width:8px; height:8px; flex:none; rotate:45deg; background:var(--brand); }
 
   /* ---- headline stack ------------------------------------------------ */
-  .hero{ flex:none; text-align:center; padding-top:14px;
+  .hero{ flex:none; text-align:center; padding-top:10px;
          padding-bottom:15px; border-bottom:2px solid var(--ink); }
   .hero .kicker{
     font-family:"Oswald","Arial Narrow",sans-serif;
@@ -78,12 +78,12 @@
     text-transform:uppercase;
   }
   .hero .since{
-    position:relative; margin:-6px 0 -10px;
+    position:relative; margin:8px 0 -12px;
     font-family:"Pinyon Script","Snell Roundhand",cursive;
-    font-size:118px; line-height:.72; color:var(--brand);
+    font-size:110px; line-height:.76; color:var(--brand);
   }
   .hero .since::before{                       /* navy plate, slipped on press */
-    content:"since"; position:absolute; inset:0; z-index:-1;
+    content:"Better"; position:absolute; inset:0; z-index:-1;
     color:var(--ghost); translate:-3px 2.5px;
   }
   .hero .shout{
@@ -92,16 +92,11 @@
     text-shadow:0 0 1.2px var(--ink);          /* ink squeeze off the plate */
   }
 
-  /* ---- product / copy block ------------------------------------------ */
-  .main{
-    flex:1 1 auto; min-height:0;
-    display:grid; grid-template-columns:1fr 2px 288px;
-    column-gap:24px; align-items:stretch;
-    margin-top:16px;
+  /* ---- product ------------------------------------------------------- */
+  .plate{
+    flex:1 1 auto; min-height:0; position:relative;
+    margin-top:14px;
   }
-  .main .gutter{ background:var(--ink); opacity:.5; }
-
-  .plate{ position:relative; min-width:0; }
   .loaf{
     position:absolute; inset:0;
     -webkit-mask-image:var(--loaf);       mask-image:var(--loaf);
@@ -111,7 +106,7 @@
     background:var(--loaf-ink);
   }
   .burst{                                     /* period oval, set on the angle */
-    position:absolute; left:-8px; top:-6px; z-index:2;
+    position:absolute; left:0; top:14px; z-index:2;
     width:184px; height:118px; rotate:-11deg;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     border:3px solid var(--ink); border-radius:50%;
@@ -124,32 +119,15 @@
   .burst .b2{ font-weight:500; font-size:15px; letter-spacing:.20em; color:var(--brand); }
   .burst .tick{ width:44px; border-top:2px solid var(--ink); margin:5px 0 4px; }
 
-  .side{ display:flex; flex-direction:column; justify-content:space-between;
-         gap:14px; padding-top:4px; }
-  .side p{
-    margin:0; font-size:14.5px; line-height:1.66;
-    text-align:justify; hyphens:auto;
-  }
-  .side .lead{
-    font-family:"Oswald","Arial Narrow",sans-serif;
-    font-weight:600; font-size:14px; letter-spacing:.11em;
-    text-transform:uppercase; color:var(--brand);
-  }
-  .side .tick{ border-top:2px solid var(--ink); opacity:.5; }
-  .side .spec{
-    display:flex; flex-direction:column; gap:8px;
-    font-family:"Oswald","Arial Narrow",sans-serif;
-    font-weight:500; font-size:15.5px; letter-spacing:.16em;
-    text-transform:uppercase; color:var(--ink);
-  }
-  .side .spec span{ display:flex; align-items:center; gap:11px; }
-    .side .spec i{ width:7px; height:7px; flex:none; rotate:45deg; background:var(--brand); }
-  .side .closer{
-    padding:16px 0 2px;
+  /* ---- specification panel ------------------------------------------- */
+  .specs{
+    flex:none; display:flex; flex-direction:column; align-items:center; gap:8px;
+    margin-top:18px; padding-top:16px; padding-bottom:4px;
     border-top:2px solid var(--ink);
-    font-family:"Libre Baskerville",Georgia,serif;
-    font-style:italic; font-size:22px; line-height:1.4;
-    text-align:center; color:var(--ink);
+    font-family:"Oswald","Arial Narrow",sans-serif;
+    font-weight:500; font-size:21px; letter-spacing:.22em;
+    text-indent:.22em;                       /* indent re-centres the tracking */
+    text-transform:uppercase; text-align:center; color:var(--ink);
   }
 
   /* ---- reversed product slab ----------------------------------------- */
@@ -205,38 +183,25 @@
       </div>
 
       <div class="hero">
-        <div class="kicker">The best thing</div>
-        <div class="since">since</div>
-        <div class="shout">SLICED BREAD</div>
+        <div class="kicker">The</div>
+        <div class="since">Better</div>
+        <div class="shout">WHITE BREAD</div>
       </div>
 
-      <div class="main">
-        <div class="plate">
-          <div class="loaf"></div>
-          <div class="burst">
-            <span class="b1">Baked</span>
-            <span class="tick"></span>
-            <span class="b2">In House</span>
-          </div>
+      <div class="plate">
+        <div class="loaf"></div>
+        <div class="burst">
+          <span class="b1">Baked</span>
+          <span class="tick"></span>
+          <span class="b2">In House</span>
         </div>
+      </div>
 
-        <div class="gutter"></div>
-
-        <div class="side">
-          <p><span class="lead">Squared off and pan-baked,</span> turned out with a top
-             that crackles under the thumb. The crumb runs open and creamy end to end
-             &mdash; the kind of slice that takes butter, then asks for a second.</p>
-          <div class="tick"></div>
-          <p>Cut it thick for toast. Cut it thin for a sandwich. It sops a sauce, holds
-             a fried egg, and makes a grilled cheese worth the drive across town.</p>
-          <div class="tick"></div>
-          <div class="spec">
-            <span><i></i>Pan-baked daily</span>
-            <span><i></i>Open, creamy crumb</span>
-            <span><i></i>Crackling top crust</span>
-          </div>
-          <div class="closer">Cut it thick.<br>Eat it warm.</div>
-        </div>
+      <div class="specs">
+        <span>100% Italian semolina</span>
+        <span>Naturally leavened</span>
+        <span>Shaped by hand</span>
+        <span>Baked fresh daily</span>
       </div>
 
       <div class="slab">The Pullman Loaf</div>

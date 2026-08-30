@@ -1,4 +1,4 @@
-# F&F Pizzeria — "The best thing since sliced bread"
+# F&F Pizzeria — "The Better White Bread"
 
 A social post for the Pullman loaf, drawn from 1920s–50s American newspaper
 bread advertising (Old Home Jumbo, Holmes' Milk-Made, Wonder, Nissen's).
@@ -28,9 +28,14 @@ Two colourways, same layout:
 
 ## Design
 
-Type is Ultra (hero), Oswald (caps and slabs), Pinyon Script (the connective
-word, echoing the script mark) and Libre Baskerville (column copy). In the
-two-colour version the blue plate on "since" is deliberately mis-registered by
+One centred column: dateline, headline, the loaf, a four-line specification
+panel, the product slab, the signature. No divider rules, nothing flanking the
+loaf but the "Baked in House" oval.
+
+Type is Ultra (hero), Oswald (caps, specs and slabs) and Pinyon Script, which
+carries the persuading word — "Better" — and echoes the script mark. Libre
+Baskerville is still loaded for body copy but the current cut has none. In the
+two-colour version the blue plate on "Better" is deliberately mis-registered by
 3px, as a two-colour press would; in the one-colour version that becomes a
 light tint of the single ink, reading as ink spread rather than mis-register.
 
@@ -72,9 +77,18 @@ Lower `LO` for a denser loaf, smaller `CELL` for a finer screen, higher
 
 ## Copy worth checking before it goes out
 
-- "Pan-baked daily" — swap if the bake isn't every day.
+The four specification lines are Justin's own words and are the only body copy
+in the post:
+
+    100% Italian semolina
+    Naturally leavened
+    Shaped by hand
+    Baked fresh daily
+
+Only one line is not from him:
+
 - "Baked in house" — the oval callout.
-- The body copy and the spec list describe the loaf in `assets/loaf-photo.png`:
-  open creamy crumb, crackling top crust. They are written to the photograph,
-  not a spec sheet. If the post should show the tighter pain de mie instead,
-  the crumb wording has to change with it.
+
+The earlier descriptive paragraphs and the "Cut it thick. Eat it warm." sign-off
+were cut when the copy was reduced to these four lines. They are in git history
+if either is wanted back.

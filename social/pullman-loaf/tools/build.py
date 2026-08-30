@@ -1,6 +1,6 @@
 import base64, os, sys
 
-TITLES = {'duo': 'Best Thing Since Sliced Bread', 'blue': 'Pullman Loaf in Blue'}
+TITLES = {'duo': 'The Better White Bread', 'blue': 'Better White Bread in Blue'}
 
 PALETTES = {
  # two-colour job: press black + F&F blue
