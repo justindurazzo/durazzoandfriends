@@ -1,9 +1,39 @@
 import base64, os, sys
+
+PALETTES = {
+ # two-colour job: press black + F&F blue
+ 'duo': """    --paper:     #E7E0CC;   /* newsprint pulp                    */
+    --paper-hi:  #F1EBDA;   --paper-hi-0: rgba(241,235,218,0);
+    --paper-lo:  #D9D0B7;   --paper-lo-0: rgba(217,208,183,0);
+    --ink:       #211D18;   /* warm press black                  */
+    --ink-soft:  #4A423A;
+    --brand:     #194887;   /* F&F blue, off the master artwork  */
+    --ghost:     #8FA0C4;   /* blue plate, slipped on press      */
+    --plate2:    var(--ink);
+    --loaf-ink:  var(--ink);""",
+
+ # one-colour job: F&F blue only, values carried by screens
+ 'blue': """    --paper:     #EAE5D5;   /* newsprint, nudged cooler for blue */
+    --paper-hi:  #F4F0E2;   --paper-hi-0: rgba(244,240,226,0);
+    --paper-lo:  #DBD4C0;   --paper-lo-0: rgba(219,212,192,0);
+    --ink:       #194887;   /* the only ink on the press         */
+    --ink-soft:  #41598C;
+    --brand:     #194887;
+    --ghost:     #9AAAC9;   /* a light tint of the same ink      */
+    --plate2:    #7E92BC;
+    --loaf-ink:  #194887;""",
+}
+
+variant = sys.argv[1] if len(sys.argv) > 1 else 'duo'
+out_name = sys.argv[2] if len(sys.argv) > 2 else 'ff-pullman-post.html'
+
 tpl  = open('post.tpl.html').read()
-loaf = 'data:image/png;base64,' + base64.b64encode(open('loaf_halftone_q.png','rb').read()).decode()
+# blue ink carries less optical weight than black, so it gets a denser screen
+screen = {'duo':'loaf_halftone_duo.png','blue':'loaf_halftone_blue.png'}[variant]
+loaf = 'data:image/png;base64,' + base64.b64encode(open(screen,'rb').read()).decode()
 out = (tpl.replace('__LOAF__', loaf)
-          .replace('__MARKPATH__', open('mark_d_final.txt').read().strip())
-          .replace('__MARKVB__', '121 218 787 563')
+          .replace('__MARKINNER__', open('mark_inner.txt').read().strip())
+          .replace('/*__PALETTE__*/', PALETTES[variant])
           .replace('/*__FONTS__*/', open('fonts/inline.css').read()))
-open('ff-pullman-post.html','w').write(out)
-print('html', os.path.getsize('ff-pullman-post.html')//1024, 'KB')
+open(out_name, 'w').write(out)
+print(f'{variant:5s} -> {out_name}  {os.path.getsize(out_name)//1024} KB')

@@ -8,13 +8,8 @@
      Deliberately single-theme -- every colour is painted explicitly so
      the sheet holds on any host ground. */
   :root{
-    --paper:      #E7E0CC;   /* newsprint pulp                     */
-    --paper-hi:   #F1EBDA;   /* where the press ran light          */
-    --ink:        #211D18;   /* warm press black                   */
-    --ink-soft:   #4A423A;
-    --navy:       #1B2A5E;   /* sampled off the real F&F mark      */
-    --navy-ghost: #7C88B0;   /* the second plate, slipped on press */
-    --ground:     #2A2621;   /* the table the sheet lies on        */
+/*__PALETTE__*/
+    --ground: #2A2621;       /* the table the sheet lies on */
   }
 
   html{ color-scheme: light; }
@@ -41,8 +36,8 @@
   .paper::before{                          /* uneven pulp, not flat cream */
     content:""; position:absolute; inset:0;
     background:
-      radial-gradient(120% 90% at 20% 6%,  var(--paper-hi) 0%, rgba(241,235,218,0) 55%),
-      radial-gradient(100% 80% at 90% 97%, #D9D0B7 0%, rgba(217,208,183,0) 62%);
+      radial-gradient(120% 90% at 20% 6%,  var(--paper-hi) 0%, var(--paper-hi-0) 55%),
+      radial-gradient(100% 80% at 90% 97%, var(--paper-lo) 0%, var(--paper-lo-0) 62%);
   }
   .fibres{                                 /* laid-paper direction */
     position:absolute; inset:0; pointer-events:none; opacity:.032;
@@ -71,7 +66,7 @@
     text-transform:uppercase;
     padding-bottom:10px; border-bottom:2px solid var(--ink);
   }
-  .eyebrow .lozenge{ width:8px; height:8px; flex:none; rotate:45deg; background:var(--navy); }
+  .eyebrow .lozenge{ width:8px; height:8px; flex:none; rotate:45deg; background:var(--brand); }
 
   /* ---- headline stack ------------------------------------------------ */
   .hero{ flex:none; text-align:center; padding-top:14px;
@@ -85,11 +80,11 @@
   .hero .since{
     position:relative; margin:-6px 0 -10px;
     font-family:"Pinyon Script","Snell Roundhand",cursive;
-    font-size:126px; line-height:.72; color:var(--navy);
+    font-size:126px; line-height:.72; color:var(--brand);
   }
   .hero .since::before{                       /* navy plate, slipped on press */
     content:"since"; position:absolute; inset:0; z-index:-1;
-    color:var(--navy-ghost); translate:-3px 2.5px;
+    color:var(--ghost); translate:-3px 2.5px;
   }
   .hero .shout{
     font-family:"Ultra","Rockwell",Georgia,serif;
@@ -113,7 +108,7 @@
     -webkit-mask-size:contain;           mask-size:contain;
     -webkit-mask-repeat:no-repeat;       mask-repeat:no-repeat;
     -webkit-mask-position:center bottom; mask-position:center bottom;
-    background:var(--ink);
+    background:var(--loaf-ink);
   }
   .burst{                                     /* period oval, set on the angle */
     position:absolute; left:-8px; top:-6px; z-index:2;
@@ -126,7 +121,7 @@
     text-transform:uppercase; text-align:center; line-height:1;
   }
   .burst .b1{ font-weight:700; font-size:27px; letter-spacing:.09em; }
-  .burst .b2{ font-weight:500; font-size:15px; letter-spacing:.20em; color:var(--navy); }
+  .burst .b2{ font-weight:500; font-size:15px; letter-spacing:.20em; color:var(--brand); }
   .burst .tick{ width:44px; border-top:2px solid var(--ink); margin:5px 0 4px; }
 
   .side{ display:flex; flex-direction:column; justify-content:space-between;
@@ -138,7 +133,7 @@
   .side .lead{
     font-family:"Oswald","Arial Narrow",sans-serif;
     font-weight:600; font-size:14px; letter-spacing:.11em;
-    text-transform:uppercase; color:var(--navy);
+    text-transform:uppercase; color:var(--brand);
   }
   .side .tick{ border-top:2px solid var(--ink); opacity:.5; }
   .side .spec{
@@ -148,7 +143,7 @@
     text-transform:uppercase; color:var(--ink);
   }
   .side .spec span{ display:flex; align-items:center; gap:11px; }
-    .side .spec i{ width:7px; height:7px; flex:none; rotate:45deg; background:var(--navy); }
+    .side .spec i{ width:7px; height:7px; flex:none; rotate:45deg; background:var(--brand); }
   .side .closer{
     padding:16px 0 2px;
     border-top:2px solid var(--ink);
@@ -160,15 +155,15 @@
   /* ---- reversed product slab ----------------------------------------- */
   .slab{
     flex:none; position:relative; margin-top:14px;
-    background:var(--navy); color:var(--paper);
+    background:var(--brand); color:var(--paper);
     font-family:"Oswald","Arial Narrow",sans-serif;
     font-weight:600; font-size:35px; letter-spacing:.30em; text-indent:.30em;
     text-transform:uppercase; text-align:center;
     padding:12px 0 15px;
   }
-  .slab::after{                                /* black plate, a hair low */
+  .slab::after{                                /* second plate, a hair low */
     content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px;
-    background:var(--ink);
+    background:var(--plate2);
   }
 
   /* ---- signature ------------------------------------------------------ */
@@ -181,7 +176,7 @@
     background:var(--paper-hi); box-shadow: inset 0 0 0 3px var(--ink);
     display:flex; align-items:center; justify-content:center;
   }
-  .badge svg{ width:62px; height:auto; display:block; }
+  .badge svg{ width:64px; height:auto; display:block; color:var(--brand); }
   .sig .name{
     font-family:"Oswald","Arial Narrow",sans-serif;
     font-weight:600; font-size:29px; letter-spacing:.20em;
@@ -191,7 +186,7 @@
     margin-left:auto;
     font-family:"Oswald","Arial Narrow",sans-serif;
     font-weight:600; font-size:25px; letter-spacing:.18em;
-    text-transform:uppercase; color:var(--navy);
+    text-transform:uppercase; color:var(--brand);
   }
 
   @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
@@ -248,8 +243,8 @@
 
       <div class="sig">
         <div class="badge">
-          <svg viewBox="__MARKVB__" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="F and F">
-            <path fill-rule="evenodd" fill="#1B2A5E" d="__MARKPATH__"/>
+          <svg viewBox="0 27.5 180 125" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="F and F">
+            __MARKINNER__
           </svg>
         </div>
         <div class="name">F &amp; F Pizzeria</div>
