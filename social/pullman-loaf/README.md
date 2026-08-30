@@ -24,6 +24,9 @@ Two colourways, same layout:
 | `assets/loaf-photo.png` | The source photograph — the loaf pictured in the posts. |
 | `assets/loaf-halftone.png` | The loaf as a 45° halftone screen, alpha only — tint with CSS `mask-image`. |
 | `assets/loaf-halftone-dense.png` | A denser screen. Blue ink carries less optical weight than black, so the one-colour version uses this. |
+| `partanna-pullman-bag.png` | The Partanna bag concept, 1080 × 1350 (`@2x` alongside) |
+| `tools/bag.tpl.html` | The bag layout. |
+| `assets/loaf-cutout.png` | The loaf keyed off its background, for the bag's product panel. |
 | `assets/pullman-uncut-photo.png` | The uncut loaf on the cutting board. Not used — kept for reference. |
 
 ## Design
@@ -61,6 +64,28 @@ which had to construct a cut face and regrade the loaf plane by plane. It is no
 longer used — this photograph needs neither — but it is kept in case that loaf
 comes back.
 
+## The Partanna bag
+
+A packaging concept: the structure and palette of the Partanna pasta bag,
+carrying the Pullman loaf. Same four specification lines as the post.
+
+Everything on it is drawn or type-set — nothing is traced from the reference
+package:
+
+- **The wordmark** is set horizontally in Bodoni Moda, a Didone that suits an
+  Italian pantry brand. It is *not* Partanna's logotype. A real job needs their
+  artwork.
+- **The wheat sheaves** are generated in `tools/wheat.svg` — a curved stem with
+  paired kernels, drawn from scratch rather than lifted.
+- **The harvest painting** on the reference bag is not reproduced. The loaf
+  takes that panel instead, which is what a bread bag would want anyway.
+- **No certification seals.** The reference carries USDA Organic and Non-GMO
+  Project marks. Those are certification marks with legal meaning and they are
+  deliberately left off.
+- **"Since 1916"** is carried over from the reference; it is Partanna's date.
+- **The net weight is a placeholder.** 24 oz (680 g) is plausible for a Pullman
+  but is not a measured figure.
+
 ## The font, and why the HTML is not in this repo
 
 Italian Plate No1 Expanded is a licensed retail family (Zetafonts). This repo
@@ -95,8 +120,17 @@ python3 build.py blue ../ff-pullman-post-blue.html
 python3 shot.py ../ff-pullman-post.html out@2x.png preview.png
 ```
 
-`tools/fonts/ofl/` holds the two open-licensed faces (Ultra, Pinyon Script);
-`make_fonts.py` combines them with the subset Italian Plate weights.
+`tools/fonts/ofl/` holds the two open-licensed faces the post uses (Ultra,
+Pinyon Script) and `tools/fonts/ofl-bodoni/` the one the bag uses;
+`make_fonts.py` combines each with the subset Italian Plate weights, writing
+`inline.css` for the post and `inline-bodoni.css` for the bag.
+
+The bag builds with:
+
+```sh
+cd tools && python3 make_fonts.py && python3 bagbuild.py
+python3 shot.py ../partanna-pullman-bag.html bag@2x.png preview.png
+```
 
 Lower `LO` for a denser loaf, smaller `CELL` for a finer screen, higher
 `FLATTEN` to open the shadow side further.

@@ -1,0 +1,252 @@
+<title>Partanna Pullman Loaf</title>
+
+<style>
+/*__FONTS__*/
+
+  /* --- Partanna Pullman Loaf -----------------------------------------
+     A packaging concept: the Partanna pasta bag's structure and palette,
+     carrying the F&F Pullman loaf. Single visual world, every colour
+     painted explicitly. */
+  :root{
+    --red-lit:    #E23A3C;
+    --red:        #C8161F;
+    --red-deep:   #96101A;
+    --red-shadow: #6B0910;
+    --gold:       #F0CE72;
+    --gold-mid:   #C89A2E;
+    --gold-dark:  #8A6414;
+    --cream:      #F8F1E0;
+    --cream-dim:  #E7D9BA;
+    --ground:     #E7E1D5;
+  }
+
+  html{ color-scheme: light; }
+  body{
+    margin:0; padding:24px; box-sizing:border-box; min-height:100vh;
+    background:
+      radial-gradient(120% 80% at 50% 12%, #F3EFE6 0%, rgba(243,239,230,0) 60%),
+      var(--ground);
+    color: var(--cream);
+    font-family:"Italian Plate No1 Expanded","Helvetica Neue",Arial,sans-serif;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .viewport{ display:flex; align-items:center; justify-content:center; }
+  .stage{
+    width:1080px; height:1350px; flex:none; position:relative; overflow:hidden;
+    transform: scale(var(--fit,1)); transform-origin:center center;
+    background:
+      radial-gradient(120% 80% at 50% 10%, #F4F0E7 0%, rgba(244,240,231,0) 62%),
+      var(--ground);
+  }
+
+  /* the surface the bag stands on */
+  .shadow{
+    position:absolute; left:50%; translate:-50% 0; bottom:78px;
+    width:640px; height:58px; border-radius:50%;
+    background: radial-gradient(50% 50%, rgba(60,40,30,.42), rgba(60,40,30,0) 70%);
+    filter: blur(6px);
+  }
+
+  .bag{
+    position:absolute; left:50%; translate:-50% 0; top:84px;
+    width:690px; height:1178px;
+    filter: drop-shadow(0 18px 26px rgba(70,30,20,.28));
+  }
+
+  /* ---- crimped top seal ---------------------------------------------- */
+  .crimp{
+    position:absolute; left:12px; right:12px; top:0; height:92px;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,.22) 0 3px, rgba(255,255,255,.09) 3px 10px),
+      linear-gradient(90deg, #400407 0%, #7B0C13 8%, #C4161F 24%, #D93034 40%,
+                      var(--red) 60%, #8E1018 84%, #400407 100%);
+    clip-path: polygon(0 14%, 8% 6%, 22% 11%, 38% 4%, 55% 10%, 72% 3%, 88% 9%, 100% 5%,
+                       100% 100%, 0 100%);
+    border-radius: 4px 4px 0 0;
+  }
+  .crimp::after{                       /* the fold catches the light */
+    content:""; position:absolute; left:0; right:0; bottom:0; height:16px;
+    background: linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,0));
+  }
+
+  /* ---- bag body ------------------------------------------------------- */
+  .bagbody{
+    position:absolute; left:0; right:0; top:74px; bottom:0;
+    border-radius: 26px 26px 12px 12px;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.22) 0, rgba(0,0,0,0) 9%,
+                      rgba(0,0,0,0) 86%, rgba(0,0,0,.26) 100%),
+      linear-gradient(90deg, #4C0509 0%, #7B0C13 4%, #A81119 11%, #CE1F27 21%,
+                      var(--red-lit) 34%, #E9494B 41%, var(--red-lit) 49%,
+                      var(--red) 62%, #A81119 82%, #740A11 93%, #480509 100%);
+    overflow:hidden;
+  }
+  .bagbody::after{                     /* gusset crease along the foot */
+    content:""; position:absolute; left:0; right:0; bottom:0; height:74px;
+    background:
+      radial-gradient(120% 100% at 50% 100%, rgba(0,0,0,.34), rgba(0,0,0,0) 70%),
+      linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.40));
+    border-top:1px solid rgba(0,0,0,.22);
+  }
+
+  .wheat{ position:absolute; width:150px; bottom:26px; opacity:1; }
+  .wheat.l{ left:-14px; rotate:-7deg; }
+  .wheat.r{ right:-14px; rotate:7deg; scale:-1 1; }
+
+  /* ---- printed front panel -------------------------------------------- */
+  .panel{
+    position:absolute; left:44px; right:44px; top:44px; bottom:34px;
+    display:flex; flex-direction:column; align-items:center;
+    padding:22px 26px 18px;
+    border:2px solid var(--gold);
+    border-radius:10px;
+    box-shadow: inset 0 0 0 3px rgba(0,0,0,.28), inset 0 0 0 5px var(--gold-mid);
+  }
+
+  .since{
+    display:flex; align-items:center; gap:12px;
+    font-weight:600; font-size:13px; letter-spacing:.34em; text-indent:.34em;
+    color:var(--gold); text-transform:uppercase;
+  }
+  .since i{ width:34px; height:1px; background:var(--gold-mid); }
+
+  .wordmark{
+    margin:8px 0 0;
+    font-family:"Bodoni Moda", "Didot", Georgia, serif;
+    font-weight:700; font-size:84px; line-height:1;
+    letter-spacing:.045em; text-indent:.045em;
+    color:#FFF9EC;
+    text-shadow: 0 2px 0 rgba(0,0,0,.30), 0 0 18px rgba(0,0,0,.18);
+  }
+  .brandword{
+    margin-top:6px;
+    font-weight:600; font-size:13px; letter-spacing:.62em; text-indent:.62em;
+    color:var(--gold); text-transform:uppercase;
+  }
+  .rule{ width:78%; height:2px; margin:14px 0 0;
+         background:linear-gradient(90deg, transparent, var(--gold-mid) 22%,
+                                    var(--gold) 50%, var(--gold-mid) 78%, transparent); }
+
+  /* ---- product panel --------------------------------------------------- */
+  .window{
+    position:relative; width:100%; height:424px; margin-top:16px;
+    border:3px solid var(--gold-mid); border-radius:96px 96px 10px 10px;
+    background: linear-gradient(180deg, #FCF8EE 0%, #F0E5CD 78%, #E6D8B8 100%);
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.22), inset 0 12px 26px rgba(120,80,30,.13);
+    overflow:hidden;
+  }
+  .window img{
+    position:absolute; left:50%; bottom:14px; translate:-50% 0;
+    width:88%; height:auto; object-fit:contain;
+    filter: drop-shadow(0 10px 12px rgba(90,60,25,.30));
+  }
+
+  /* ---- origin + specifications ----------------------------------------- */
+  .origin{ display:flex; align-items:center; margin-top:18px; }
+  .flag{
+    width:40px; height:27px; border-radius:3px; overflow:hidden; flex:none;
+    box-shadow: 0 0 0 2px var(--gold-mid), 0 1px 3px rgba(0,0,0,.35);
+    background: linear-gradient(90deg, #1B7A3E 0 33.34%, #F4F1E8 33.34% 66.67%, #C8202C 66.67% 100%);
+  }
+  .origin span{
+    font-weight:600; font-size:14px; letter-spacing:.24em; text-indent:.24em;
+    color:var(--gold); text-transform:uppercase;
+  }
+
+  .specs{
+    display:flex; flex-direction:column; align-items:center; gap:7px;
+    margin-top:16px;
+    font-weight:500; font-size:16.5px; letter-spacing:.14em; text-indent:.14em;
+    color:var(--cream); text-transform:uppercase; text-align:center;
+  }
+
+  /* ---- product name ---------------------------------------------------- */
+  .premium{
+    display:flex; align-items:center; gap:14px; margin-top:auto;
+    font-weight:600; font-size:15px; letter-spacing:.42em; text-indent:.42em;
+    color:var(--gold); text-transform:uppercase;
+  }
+  .premium i{ width:46px; height:1px; background:var(--gold-mid); }
+
+  .cartouche{
+    width:100%; margin-top:10px; padding:12px 0 13px;
+    text-align:center; border-radius:8px;
+    border:2px solid var(--gold);
+    background: linear-gradient(180deg, var(--red-deep), var(--red-shadow));
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.30), 0 2px 0 rgba(0,0,0,.22);
+  }
+  .cartouche .name{
+    font-family:"Bodoni Moda","Didot",Georgia,serif;
+    font-weight:700; font-size:44px; line-height:1;
+    letter-spacing:.10em; text-indent:.10em; color:#FFF8E9;
+  }
+  .cartouche .kind{
+    margin-top:7px;
+    font-weight:500; font-size:15px; letter-spacing:.30em; text-indent:.30em;
+    color:var(--cream-dim); text-transform:uppercase;
+  }
+  .netwt{
+    margin-top:11px;
+    font-weight:500; font-size:14px; letter-spacing:.16em; text-indent:.16em;
+    color:var(--cream-dim); text-transform:uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+</style>
+
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="shadow"></div>
+
+    <div class="bag">
+      <div class="crimp"></div>
+      <div class="bagbody">
+        __WHEAT_L__
+        __WHEAT_R__
+
+        <div class="panel">
+          <div class="since"><i></i><span>Since 1916</span><i></i></div>
+          <div class="wordmark">PARTANNA</div>
+          <div class="brandword">Brand</div>
+          <div class="rule"></div>
+
+          <div class="window">
+            <img src="__LOAF__" alt="A cut Pullman loaf">
+          </div>
+
+          <div class="origin"><span class="flag"></span></div>
+
+          <div class="specs">
+            <span>100% Italian semolina</span>
+            <span>Naturally leavened</span>
+            <span>Shaped by hand</span>
+            <span>Baked fresh daily</span>
+          </div>
+
+          <div class="premium"><i></i><span>Premium</span><i></i></div>
+          <div class="cartouche">
+            <div class="name">PULLMAN LOAF</div>
+            <div class="kind">Artisanal Bread</div>
+          </div>
+          <div class="netwt">Net wt 24 oz (680 g)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const EXPORT = location.search.includes('export');
+  if (EXPORT) {
+    document.body.style.cssText += ';padding:0;display:block;width:1080px;height:1350px;overflow:hidden';
+  }
+  function fit(){
+    const pad = EXPORT ? 0 : 48;
+    const s = EXPORT ? 1 : Math.min((innerWidth - pad) / 1080, (innerHeight - pad) / 1350, 1);
+    document.documentElement.style.setProperty('--fit', s);
+    const v = document.querySelector('.viewport');
+    v.style.width  = (1080 * s) + 'px';
+    v.style.height = (1350 * s) + 'px';
+  }
+  addEventListener('resize', fit); fit();
+</script>

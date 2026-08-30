@@ -6,7 +6,9 @@
 tools/fonts/*.otf
 tools/fonts/IP-*.woff2
 tools/fonts/inline.css
+tools/fonts/inline-bodoni.css
 
 # build outputs of the above
 ff-pullman-post.html
 ff-pullman-post-blue.html
+partanna-pullman-bag.html

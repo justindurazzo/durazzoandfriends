@@ -1,7 +1,8 @@
 """Build tools/fonts/inline.css, the font payload build.py inlines into the page.
 
 Two sources:
-  fonts/ofl/*.woff2   Ultra and Pinyon Script - SIL Open Font License, committed.
+  fonts/ofl/*.woff2        Ultra and Pinyon Script - SIL OFL, committed.
+  fonts/ofl-bodoni/*.woff2 Bodoni Moda, for the bag - SIL OFL, committed.
   fonts/*.otf         Italian Plate No1 Expanded - licensed retail family, NOT
                       committed. Drop the OTFs in fonts/ before rebuilding.
 
@@ -18,6 +19,15 @@ SUBSET = ("U+0020-007E,U+00A0,U+00B7,U+2013,U+2014,U+2018,U+2019,"
 IP_WEIGHTS = {'Regular': 400, 'Medium': 500, 'Demibold': 600, 'Bold': 700}
 
 
+def weight_of(tt):
+    """A variable font covers a range; a static one is a single class."""
+    if 'fvar' in tt:
+        for ax in tt['fvar'].axes:
+            if ax.axisTag == 'wght':
+                return '%d %d' % (ax.minValue, ax.maxValue)
+    return str(tt['OS/2'].usWeightClass)
+
+
 def face(family, weight, style, path):
     b64 = base64.b64encode(open(path, 'rb').read()).decode()
     return (f"@font-face {{\n  font-family: '{family}';\n"
@@ -26,11 +36,21 @@ def face(family, weight, style, path):
             f"  src: url(data:font/woff2;base64,{b64}) format('woff2');\n}}")
 
 
-blocks = []
-for p in sorted(glob.glob(os.path.join(FONTS, 'ofl', '*.woff2'))):
-    names = {r.nameID: str(r) for r in TTFont(p)['name'].names if r.platformID == 3}
-    blocks.append(face(names.get(1), 400, 'normal', p))
-    print('ofl      %-32s %s' % (names.get(1), os.path.getsize(p) // 1024))
+def ofl_blocks(subdir):
+    out = []
+    for p in sorted(glob.glob(os.path.join(FONTS, subdir, '*.woff2'))):
+        tt = TTFont(p)
+        nm = {r.nameID: str(r) for r in tt['name'].names if r.platformID == 3}
+        fam = nm.get(16) or nm.get(1)
+        # optical-size families name themselves "Bodoni Moda 11pt" in every name
+        # record; Google's own stylesheet drops that suffix, and so does the page
+        fam = re.sub(r'\s+\d+(\.\d+)?pt$', '', fam)
+        out.append(face(fam, weight_of(tt), 'normal', p))
+        print('%-12s %-28s %3d KB' % (subdir, fam, os.path.getsize(p) // 1024))
+    return out
+
+
+blocks = ofl_blocks('ofl')
 
 found = 0
 for name, weight in IP_WEIGHTS.items():
@@ -53,3 +73,8 @@ if not found:
 out = os.path.join(FONTS, 'inline.css')
 open(out, 'w').write('\n'.join(blocks))
 print('wrote', out, os.path.getsize(out) // 1024, 'KB')
+
+# the bag uses a Didone the ad does not, so it gets its own payload
+bod = os.path.join(FONTS, 'inline-bodoni.css')
+open(bod, 'w').write('\n'.join(ofl_blocks('ofl-bodoni')))
+print('wrote', bod, os.path.getsize(bod) // 1024, 'KB')
