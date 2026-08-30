@@ -70,7 +70,7 @@
 
   /* ---- headline stack ------------------------------------------------ */
   .hero{ flex:none; text-align:center; padding-top:10px;
-         padding-bottom:15px; border-bottom:2px solid var(--ink); }
+         padding-bottom:6px; }
   .hero .kicker{
     font-family:"Oswald","Arial Narrow",sans-serif;
     font-weight:600; font-size:38px; line-height:1;
@@ -95,7 +95,7 @@
   /* ---- product ------------------------------------------------------- */
   .plate{
     flex:1 1 auto; min-height:0; position:relative;
-    margin-top:14px;
+    margin-top:24px;
   }
   .loaf{
     position:absolute; inset:0;
@@ -121,14 +121,15 @@
 
   /* ---- specification panel ------------------------------------------- */
   .specs{
-    flex:none; display:flex; flex-direction:column; align-items:center; gap:8px;
-    margin-top:18px; padding-top:16px; padding-bottom:4px;
-    border-top:2px solid var(--ink);
+    flex:none; display:flex; flex-direction:column; align-items:center; gap:11px;
+    margin-top:18px; padding-bottom:6px;
     font-family:"Oswald","Arial Narrow",sans-serif;
-    font-weight:500; font-size:21px; letter-spacing:.22em;
-    text-indent:.22em;                       /* indent re-centres the tracking */
-    text-transform:uppercase; text-align:center; color:var(--ink);
+    font-weight:500; font-size:23px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--ink);
   }
+  .specs .row{ display:flex; align-items:center; justify-content:center; gap:20px; }
+  .specs .row span{ text-indent:.22em; }     /* indent offsets the trailing track */
+  .specs .row i{ width:8px; height:8px; flex:none; rotate:45deg; background:var(--brand); }
 
   /* ---- reversed product slab ----------------------------------------- */
   .slab{
@@ -198,10 +199,8 @@
       </div>
 
       <div class="specs">
-        <span>100% Italian semolina</span>
-        <span>Naturally leavened</span>
-        <span>Shaped by hand</span>
-        <span>Baked fresh daily</span>
+        <div class="row"><span>100% Italian semolina</span><i></i><span>Naturally leavened</span></div>
+        <div class="row"><span>Shaped by hand</span><i></i><span>Baked fresh daily</span></div>
       </div>
 
       <div class="slab">The Pullman Loaf</div>

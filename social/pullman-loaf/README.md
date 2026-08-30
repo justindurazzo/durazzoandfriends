@@ -28,9 +28,10 @@ Two colourways, same layout:
 
 ## Design
 
-One centred column: dateline, headline, the loaf, a four-line specification
-panel, the product slab, the signature. No divider rules, nothing flanking the
-loaf but the "Baked in House" oval.
+One centred column: dateline, headline, the loaf, two lines of specifications,
+the product slab, the signature. The only rules left are the dateline rule at
+the top and the signature rule at the bottom - the loaf sits on open paper,
+with nothing flanking it but the "Baked in House" oval.
 
 Type is Ultra (hero), Oswald (caps, specs and slabs) and Pinyon Script, which
 carries the persuading word — "Better" — and echoes the script mark. Libre
@@ -80,10 +81,10 @@ Lower `LO` for a denser loaf, smaller `CELL` for a finer screen, higher
 The four specification lines are Justin's own words and are the only body copy
 in the post:
 
-    100% Italian semolina
-    Naturally leavened
-    Shaped by hand
-    Baked fresh daily
+    100% Italian semolina  <>  Naturally leavened
+    Shaped by hand  <>  Baked fresh daily
+
+paired onto two lines and split by the brand lozenge.
 
 Only one line is not from him:
 
