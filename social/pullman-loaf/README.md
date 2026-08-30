@@ -24,9 +24,10 @@ Two colourways, same layout:
 | `assets/loaf-photo.png` | The source photograph — the loaf pictured in the posts. |
 | `assets/loaf-halftone.png` | The loaf as a 45° halftone screen, alpha only — tint with CSS `mask-image`. |
 | `assets/loaf-halftone-dense.png` | A denser screen. Blue ink carries less optical weight than black, so the one-colour version uses this. |
-| `partanna-pullman-bag.png` | The Partanna bag concept, 1080 × 1350 (`@2x` alongside) |
+| `partanna-pullman-bag.png` | The Partanna bag concept, 1080 × 1080 (`@2x` alongside) |
 | `tools/bag.tpl.html` | The bag layout. |
-| `assets/loaf-cutout.png` | The loaf keyed off its background, for the bag's product panel. |
+| `assets/loaf-cutout.png` | The loaf keyed off its background, on transparency. Not used by the current bag. |
+| `assets/partanna-wordmark.svg` | Partanna's logotype, traced from the reference bag. Comp quality — see below. |
 | `assets/pullman-uncut-photo.png` | The uncut loaf on the cutting board. Not used — kept for reference. |
 
 ## Design
@@ -66,19 +67,19 @@ comes back.
 
 ## The Partanna bag
 
-A packaging concept: the structure and palette of the Partanna pasta bag,
-carrying the Pullman loaf. Same four specification lines as the post.
+A packaging concept: Partanna's branding and palette on a wide bread pouch.
+Landscape rather than the tall pasta bag, and fully printed — the loaf is
+inside, not shown, so there is no product window. Same four specification
+lines as the post.
 
-Everything on it is drawn or type-set — nothing is traced from the reference
-package:
-
-- **The wordmark** is set horizontally in Bodoni Moda, a Didone that suits an
-  Italian pantry brand. It is *not* Partanna's logotype. A real job needs their
-  artwork.
+- **The wordmark is Partanna's own logotype**, traced to vector from the
+  reference photograph and rebuilt with its white / gold / dark outline
+  (`assets/partanna-wordmark.svg`). The source was about 250px wide, so this is
+  **comp quality** — good at the size it sits here, but production needs real
+  artwork from Partanna.
 - **The wheat sheaves** are generated in `tools/wheat.svg` — a curved stem with
-  paired kernels, drawn from scratch rather than lifted.
-- **The harvest painting** on the reference bag is not reproduced. The loaf
-  takes that panel instead, which is what a bread bag would want anyway.
+  paired kernels, drawn rather than lifted.
+- **The harvest painting** on the reference bag is not reproduced.
 - **No certification seals.** The reference carries USDA Organic and Non-GMO
   Project marks. Those are certification marks with legal meaning and they are
   deliberately left off.
