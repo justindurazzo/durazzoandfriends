@@ -1,5 +1,7 @@
 import base64, os, sys
 
+TITLES = {'duo': 'Best Thing Since Sliced Bread', 'blue': 'Pullman Loaf in Blue'}
+
 PALETTES = {
  # two-colour job: press black + F&F blue
  'duo': """    --paper:     #E7E0CC;   /* newsprint pulp                    */
@@ -33,6 +35,7 @@ screen = {'duo':'loaf_halftone_duo.png','blue':'loaf_halftone_blue.png'}[variant
 loaf = 'data:image/png;base64,' + base64.b64encode(open(screen,'rb').read()).decode()
 out = (tpl.replace('__LOAF__', loaf)
           .replace('__MARKINNER__', open('mark_inner.txt').read().strip())
+          .replace('__TITLE__', TITLES[variant])
           .replace('/*__PALETTE__*/', PALETTES[variant])
           .replace('/*__FONTS__*/', open('fonts/inline.css').read()))
 open(out_name, 'w').write(out)
