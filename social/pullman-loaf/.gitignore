@@ -1,8 +1,12 @@
-# Italian Plate No1 Expanded is a licensed retail family (Zetafonts), and this
-# repo is public. The build inlines it as a base64 WOFF2 subset, so committing
-# the font or any build output containing it would publish the font itself.
+# Italian Plate No1 Expanded is a licensed retail family (Zetafonts) and this
+# repo is public. tools/make_fonts.py inlines it as a base64 WOFF2 subset, so
+# the font -- and any build output carrying it -- stays out of version control.
 #
-# Keep both out of version control. Drop the OTFs into tools/fonts/ to rebuild.
-tools/fonts/
+# To rebuild: drop the OTFs into tools/fonts/ and run tools/make_fonts.py.
+tools/fonts/*.otf
+tools/fonts/IP-*.woff2
+tools/fonts/inline.css
+
+# build outputs of the above
 ff-pullman-post.html
 ff-pullman-post-blue.html

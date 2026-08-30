@@ -68,7 +68,8 @@ is public, and the build inlines the font as a base64 WOFF2 subset so the page
 is self-contained — which means committing the built HTML would publish the
 font file itself.
 
-So `tools/fonts/` and the two built HTML files are gitignored. The PNGs are the
+So the OTFs, their subsets, the generated `inline.css` and the two built HTML
+files are all gitignored. The PNGs are the
 deliverable and are committed; the HTML is a build output. To rebuild, drop the
 family's OTFs into `tools/fonts/` first — `tools/build.py` subsets and inlines
 them. Only the four weights the copy uses are needed: Regular, Medium,
@@ -85,6 +86,7 @@ colourways; the palettes and titles live in `tools/build.py`.
 
 ```sh
 cd tools
+python3 make_fonts.py                             # needs the OTFs in fonts/
 python3 loaf3_build.py ../assets/loaf-photo.png   # cutout + mask
 HT_SRC=loaf3_src.png HT_MSK=loaf3_mask.png HT_OUT=screen.png \
   python3 halftone2.py 0.24 1.00 0.90 11 0.72     # LO HI GAMMA CELL FLATTEN
@@ -92,6 +94,9 @@ python3 build.py duo  ../ff-pullman-post.html
 python3 build.py blue ../ff-pullman-post-blue.html
 python3 shot.py ../ff-pullman-post.html out@2x.png preview.png
 ```
+
+`tools/fonts/ofl/` holds the two open-licensed faces (Ultra, Pinyon Script);
+`make_fonts.py` combines them with the subset Italian Plate weights.
 
 Lower `LO` for a denser loaf, smaller `CELL` for a finer screen, higher
 `FLATTEN` to open the shadow side further.

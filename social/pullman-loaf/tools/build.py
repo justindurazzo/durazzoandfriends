@@ -1,5 +1,7 @@
 import base64, os, sys
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+
 TITLES = {'duo': 'The Better White Bread', 'blue': 'Better White Bread in Blue'}
 
 PALETTES = {
@@ -29,14 +31,17 @@ PALETTES = {
 variant = sys.argv[1] if len(sys.argv) > 1 else 'duo'
 out_name = sys.argv[2] if len(sys.argv) > 2 else 'ff-pullman-post.html'
 
-tpl  = open('post.tpl.html').read()
+tpl  = open(os.path.join(HERE, 'post.tpl.html')).read()
 # blue ink carries less optical weight than black, so it gets a denser screen
-screen = {'duo':'loaf_halftone_duo.png','blue':'loaf_halftone_blue.png'}[variant]
+screen = os.path.join(HERE, '..', 'assets',
+                      {'duo': 'loaf-halftone.png',        # black holds at a lighter screen
+                       'blue': 'loaf-halftone-dense.png'  # blue needs the denser one
+                       }[variant])
 loaf = 'data:image/png;base64,' + base64.b64encode(open(screen,'rb').read()).decode()
 out = (tpl.replace('__LOAF__', loaf)
-          .replace('__MARKINNER__', open('mark_inner.txt').read().strip())
+          .replace('__MARKINNER__', open(os.path.join(HERE, 'mark_inner.txt')).read().strip())
           .replace('__TITLE__', TITLES[variant])
           .replace('/*__PALETTE__*/', PALETTES[variant])
-          .replace('/*__FONTS__*/', open('fonts/inline.css').read()))
+          .replace('/*__FONTS__*/', open(os.path.join(HERE, 'fonts', 'inline.css')).read()))
 open(out_name, 'w').write(out)
 print(f'{variant:5s} -> {out_name}  {os.path.getsize(out_name)//1024} KB')
