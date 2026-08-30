@@ -1,0 +1,8 @@
+# Italian Plate No1 Expanded is a licensed retail family (Zetafonts), and this
+# repo is public. The build inlines it as a base64 WOFF2 subset, so committing
+# the font or any build output containing it would publish the font itself.
+#
+# Keep both out of version control. Drop the OTFs into tools/fonts/ to rebuild.
+tools/fonts/
+ff-pullman-post.html
+ff-pullman-post-blue.html

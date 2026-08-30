@@ -18,7 +18,7 @@ Two colourways, same layout:
 | `ff-pullman-post@2x.png` | Two-colour, 2160 × 2700 — retina / print |
 | `ff-pullman-post-blue.png` | One-colour blue, 1080 × 1350 |
 | `ff-pullman-post-blue@2x.png` | One-colour blue, 2160 × 2700 |
-| `ff-pullman-post*.html` | Self-contained sources. Fonts, halftone and mark all inlined; open offline. |
+| `tools/post.tpl.html` | The layout. One template drives both colourways. |
 | `assets/ff-mark.svg` | The F&F script mark, from the master artwork. Fills with `currentColor`. |
 | `assets/ff-script-logo.pdf` | The master logo file (navy / black / white artboards). |
 | `assets/loaf-photo.png` | The source photograph — the loaf pictured in the posts. |
@@ -33,9 +33,12 @@ the product slab, the signature. The only rules left are the dateline rule at
 the top and the signature rule at the bottom - the loaf sits on open paper,
 with nothing flanking it but the "Baked in House" oval.
 
-Type is Ultra (hero), Oswald (caps, specs and slabs) and Pinyon Script, which
-carries the persuading word — "Better" — and echoes the script mark. Libre
-Baskerville is still loaded for body copy but the current cut has none. In the
+Type is Ultra for the headline word, Pinyon Script for "Better" — which carries
+the persuasion and echoes the script mark — and Italian Plate No1 Expanded for
+every other line in the piece: dateline, oval, specifications, product slab and
+signature. Expanded is a far wider face than the condensed Oswald it replaced,
+so the tracking came down across the board; the sizes were set from measured
+advance widths rather than by eye. In the
 two-colour version the blue plate on "Better" is deliberately mis-registered by
 3px, as a two-colour press would; in the one-colour version that becomes a
 light tint of the single ink, reading as ink spread rather than mis-register.
@@ -57,6 +60,23 @@ while keeping the local texture that makes the crust and crumb legible.
 which had to construct a cut face and regrade the loaf plane by plane. It is no
 longer used — this photograph needs neither — but it is kept in case that loaf
 comes back.
+
+## The font, and why the HTML is not in this repo
+
+Italian Plate No1 Expanded is a licensed retail family (Zetafonts). This repo
+is public, and the build inlines the font as a base64 WOFF2 subset so the page
+is self-contained — which means committing the built HTML would publish the
+font file itself.
+
+So `tools/fonts/` and the two built HTML files are gitignored. The PNGs are the
+deliverable and are committed; the HTML is a build output. To rebuild, drop the
+family's OTFs into `tools/fonts/` first — `tools/build.py` subsets and inlines
+them. Only the four weights the copy uses are needed: Regular, Medium,
+Demibold, Bold.
+
+The other four faces in the piece (Ultra, Pinyon Script, and previously Oswald
+and Libre Baskerville) are SIL Open Font License families and carry no such
+restriction.
 
 ## Re-rendering
 
