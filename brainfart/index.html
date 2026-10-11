@@ -8,296 +8,234 @@
 <title>Brainfart</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,wght@1,600&family=Instrument+Serif&family=Bricolage+Grotesque:wght@700&family=IM+Fell+English&family=Unbounded:wght@700&family=Young+Serif&family=Michroma&display=swap">
 <style>
-/* Layout: a gallery program sheet. Huge expanded caps, hard rules, one ultramarine block per decision, a finite grid of films. */
+/* Layout: a phone app in an institution's clothes. White ground, black type, hard rules; every discipline speaks in its own typeface and its own flat color field, the way a kunsthalle gives each series an identity. */
 :root {
+  --desk: #e9e9e6;
   --bg: #ffffff;
-  --fg: #0e0f13;
-  --muted: #5f6270;
-  --line: #d8d9e0;
-  --accent: #2b38f5;
-  --on-accent: #ffffff;
-  --accent-soft: #eceefe;
-  --good: #11804a;
-  --bad: #c2321f;
-  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --fg: #000000;
+  --muted: #6a6a6a;
+  --line: #000000;
+  --hair: #dcdcdc;
+  --chip: #f2f2f2;
+  --good: #0a7d3b;
+  --bad: #d0281a;
+  --ui: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --logo: "Archivo", "Helvetica Neue", Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0c0d11; --fg: #f1f1f4; --muted: #9b9eac; --line: #2a2c36;
-    --accent: #7f88ff; --on-accent: #0c0d11; --accent-soft: #171a33;
-    --good: #4cc38a; --bad: #ff7a66; color-scheme: dark;
+    --desk: #161616; --bg: #0a0a0a; --fg: #f4f4f4; --muted: #9a9a9a; --line: #f4f4f4;
+    --hair: #2c2c2c; --chip: #1c1c1c; --good: #4fd08a; --bad: #ff7766; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0c0d11; --fg: #f1f1f4; --muted: #9b9eac; --line: #2a2c36;
-  --accent: #7f88ff; --on-accent: #0c0d11; --accent-soft: #171a33;
-  --good: #4cc38a; --bad: #ff7a66; color-scheme: dark;
+  --desk: #161616; --bg: #0a0a0a; --fg: #f4f4f4; --muted: #9a9a9a; --line: #f4f4f4;
+  --hair: #2c2c2c; --chip: #1c1c1c; --good: #4fd08a; --bad: #ff7766; color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.5; }
-.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; }
-button { font: inherit; color: inherit; cursor: pointer; }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-a { color: inherit; }
-.mono { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
-.label { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { background: var(--desk); color: var(--fg); font-family: var(--ui); font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; padding: 0; }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
 
-/* Header */
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 2px solid var(--fg); }
-.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; flex-wrap: wrap; }
-.wordmark { font-family: var(--font-display); font-weight: 900; font-stretch: 125%; font-size: 1.35rem; letter-spacing: -0.01em; text-transform: uppercase; text-decoration: none; }
-.top nav { display: flex; gap: 20px; flex-wrap: wrap; }
-.top nav a { text-decoration: none; font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; }
-.top nav a:hover { color: var(--accent); }
+/* Desk + device */
+.desk { height: 100%; display: flex; align-items: center; justify-content: center; gap: 56px; padding-inline: 16px; padding-block: 24px; }
+.aside { max-width: 300px; display: grid; gap: 14px; }
+.aside .logo { font-size: 44px; }
+.aside p { margin: 0; color: var(--muted); }
+.device { position: relative; width: 100%; max-width: 410px; height: min(100%, 860px); background: var(--bg); border: 1px solid var(--line); display: flex; flex-direction: column; overflow: hidden; }
+@media (max-width: 760px) {
+  .desk { padding: 0; gap: 0; }
+  .aside { display: none; }
+  .device { max-width: none; height: 100%; border: 0; }
+}
 
-/* Hero */
-.hero { padding-block: 56px 40px; display: grid; gap: 28px; }
-.hero h1 { font-family: var(--font-display); font-weight: 850; font-stretch: 125%; text-transform: uppercase; font-size: clamp(2.5rem, 9.4vw, 7.6rem); line-height: 0.88; letter-spacing: -0.025em; margin: 0; text-wrap: balance; }
-.hero h1 .ac { color: var(--accent); }
-.hero-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: end; }
-.lede { font-size: 1.2rem; line-height: 1.45; max-width: 52ch; margin: 0; }
-.timepick { display: grid; gap: 10px; }
-.seg { display: grid; grid-template-columns: repeat(4, 1fr); border: 2px solid var(--fg); }
-.seg button { background: var(--bg); border: 0; border-left: 2px solid var(--fg); padding: 14px 6px; font-family: var(--font-display); font-weight: 800; font-stretch: 110%; font-size: clamp(1.3rem, 3vw, 2rem); line-height: 1; }
-.seg button:first-child { border-left: 0; }
-.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
-.seg button small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 6px; }
+.logo { font-family: var(--logo); font-weight: 900; font-stretch: 112%; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.9; }
 
-/* Sections */
-section.block { padding-block: 44px; border-top: 2px solid var(--fg); }
-.sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
-.sec-head h2 { font-family: var(--font-display); font-weight: 800; font-stretch: 115%; text-transform: uppercase; font-size: clamp(1.6rem, 4vw, 2.6rem); letter-spacing: -0.015em; line-height: 1; margin: 0; }
+/* App bar */
+.appbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); flex: none; }
+.appbar .logo { font-size: 24px; }
+.appbar .right { display: flex; align-items: center; gap: 12px; }
+.screen { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+.pad { padding: 18px; }
 
-/* Program */
-.program { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 40px 28px; }
-.film { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.thumb { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border: 0; padding: 0; background: var(--accent-soft); overflow: hidden; }
-.thumb canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.thumb .mins { position: absolute; left: 14px; bottom: 6px; font-family: var(--font-display); font-weight: 900; font-stretch: 125%; font-size: 4.4rem; line-height: 1; color: var(--fg); }
-.thumb .play { position: absolute; right: 14px; bottom: 16px; background: var(--fg); color: var(--bg); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 12px; }
-.thumb:hover .play { background: var(--accent); color: var(--on-accent); }
-.film h3 { font-family: var(--font-display); font-weight: 750; font-stretch: 100%; font-size: 1.45rem; line-height: 1.12; margin: 0; text-wrap: balance; }
+/* Tab bar */
+.tabbar { flex: none; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); background: var(--bg); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.tab { display: grid; justify-items: center; gap: 4px; padding: 10px 0 12px; color: var(--muted); }
+.tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.tab[aria-current="page"] { color: var(--fg); }
+.tab[aria-current="page"] span { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Today header */
+.today-head { padding: 22px 18px 18px; border-bottom: 1px solid var(--line); display: grid; gap: 14px; }
+.today-head h1 { margin: 0; font-family: var(--logo); font-weight: 800; font-stretch: 100%; font-size: 34px; line-height: 1; letter-spacing: -0.02em; }
+.today-head p { margin: 0; color: var(--muted); }
+.timeseg { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); }
+.timeseg button { padding: 10px 0; border-left: 1px solid var(--line); font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; }
+.timeseg button:first-child { border-left: 0; }
+.timeseg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+
+/* Film card */
+.film { border-bottom: 1px solid var(--line); }
+.art { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; overflow: hidden; }
+.art canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.art .dur { position: absolute; left: 14px; top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 3px 7px; }
+.art .done-tag { position: absolute; right: 14px; top: 12px; font-family: var(--mono); font-size: 11px; padding: 3px 7px; background: #000; color: #fff; }
+.film-body { padding: 14px 18px 18px; display: grid; gap: 8px; }
+.film-meta { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.film h2 { margin: 0; font-size: 28px; line-height: 1.05; font-weight: 400; text-wrap: balance; }
 .film p { margin: 0; color: var(--muted); }
-.why { font-family: var(--font-mono); font-size: 0.76rem; color: var(--accent); }
-.endnote { margin-top: 36px; padding: 18px 20px; border: 2px dashed var(--line); display: flex; gap: 16px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-.endnote strong { font-family: var(--font-display); font-stretch: 110%; text-transform: uppercase; font-size: 1.05rem; }
+.why { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; color: var(--fg); }
+.actions { display: flex; gap: 8px; margin-top: 6px; }
+.btn { border: 1px solid var(--line); padding: 9px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
+.btn.solid { background: var(--fg); color: var(--bg); }
+.btn svg { width: 14px; height: 14px; fill: currentColor; }
+.btn.icon { padding: 9px 11px; }
+.btn.icon svg { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.btn.icon[aria-pressed="true"] svg { fill: currentColor; }
+.end { padding: 28px 18px 36px; display: grid; gap: 8px; }
+.end b { font-family: var(--logo); font-weight: 800; font-size: 22px; line-height: 1.05; }
+.end span { color: var(--muted); }
 
-/* Interests */
-.chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip { border: 2px solid var(--fg); background: var(--bg); padding: 8px 14px; font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
-.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-.hint { color: var(--muted); max-width: 60ch; margin: 16px 0 0; }
+/* Discipline typefaces: each discipline is its own series */
+.f-Physics     { font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 125%; letter-spacing: -0.02em; font-size: 0.86em; }
+.f-Mathematics { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 600; }
+.f-Biology     { font-family: "Instrument Serif", Georgia, serif; font-size: 1.08em; }
+.f-Chemistry   { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+.f-History     { font-family: "IM Fell English", Georgia, serif; font-size: 1.04em; }
+.f-Acoustics   { font-family: "Unbounded", sans-serif; font-weight: 700; font-size: 0.8em; letter-spacing: -0.01em; }
+.f-Ecology     { font-family: "Young Serif", Georgia, serif; }
+.f-Space       { font-family: "Michroma", sans-serif; font-size: 0.74em; letter-spacing: 0.01em; }
 
-/* Path */
-.path-summary { display: flex; gap: 40px; flex-wrap: wrap; margin-bottom: 24px; }
-.stat b { display: block; font-family: var(--font-display); font-weight: 850; font-stretch: 125%; font-size: 2.6rem; line-height: 1; font-variant-numeric: tabular-nums; }
-.rows { border-top: 1px solid var(--line); }
-.row { display: grid; grid-template-columns: 70px minmax(0, 1fr) auto; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.row .t { font-weight: 600; }
-.pill { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border: 1.5px solid currentColor; white-space: nowrap; }
+/* Explore */
+.sec-title { padding: 22px 18px 12px; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line); }
+.sec-title h1 { margin: 0; font-family: var(--logo); font-weight: 800; font-size: 34px; line-height: 1; letter-spacing: -0.02em; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; }
+.tile { aspect-ratio: 1; max-width: 100%; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; border-bottom: 1px solid var(--line); }
+.tile:nth-child(odd) { border-right: 1px solid var(--line); }
+.tile .nm { font-size: 26px; line-height: 1; overflow-wrap: anywhere; }
+.backrow { padding: 12px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; }
+.disc-hero { padding: 26px 18px 22px; border-bottom: 1px solid var(--line); }
+.disc-hero .nm { font-size: 46px; line-height: 0.95; overflow-wrap: anywhere; }
+
+/* Library */
+.subseg { display: flex; gap: 0; margin: 14px 18px; border: 1px solid var(--line); }
+.subseg button { flex: 1; padding: 9px 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+.subseg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--hair); width: 100%; text-align: left; }
+.row .thumb { position: relative; width: 64px; height: 64px; overflow: hidden; }
+.row .thumb canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.row .t { font-size: 17px; line-height: 1.15; }
+.pill { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 6px; border: 1px solid currentColor; white-space: nowrap; }
 .pill.ok { color: var(--good); }
 .pill.no { color: var(--bad); }
-.empty { color: var(--muted); padding: 22px 0; border-bottom: 1px solid var(--line); }
-.linkbtn { background: none; border: 0; padding: 0; text-decoration: underline; font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+.empty { padding: 30px 18px; color: var(--muted); }
 
-/* How it ranks */
-.compare { width: 100%; border-collapse: collapse; }
-.compare-wrap { overflow-x: auto; }
-.compare th, .compare td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
-.compare th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 500; }
-.compare td:first-child { font-weight: 600; width: 22%; }
-.compare td:last-child { color: var(--fg); }
-.compare td:nth-child(2) { color: var(--muted); }
-.signals { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 28px; margin-top: 40px; }
-.sig h4 { margin: 8px 0 6px; font-family: var(--font-display); font-stretch: 110%; font-size: 1.15rem; text-transform: uppercase; }
-.sig p { margin: 0; color: var(--muted); }
-.bar { height: 10px; background: var(--accent-soft); }
-.bar i { display: block; height: 100%; background: var(--accent); }
+/* You */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+.stat { padding: 16px 18px; border-left: 1px solid var(--line); display: grid; gap: 4px; }
+.stat:first-child { border-left: 0; }
+.stat b { font-family: var(--logo); font-weight: 800; font-size: 32px; line-height: 1; font-variant-numeric: tabular-nums; }
+.block { padding: 20px 18px; border-bottom: 1px solid var(--line); display: grid; gap: 14px; }
+.block h3 { margin: 0; font-family: var(--logo); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); padding: 7px 12px; font-size: 17px; line-height: 1.1; }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.sig { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; }
+.sig .bar { grid-column: 1 / -1; height: 6px; background: var(--chip); }
+.sig .bar i { display: block; height: 100%; background: var(--fg); }
+.sig small { grid-column: 1 / -1; color: var(--muted); font-size: 13px; }
+.linkbtn { text-decoration: underline; text-underline-offset: 3px; color: var(--muted); font-size: 13px; justify-self: start; }
 
-footer { border-top: 2px solid var(--fg); padding-block: 28px 48px; }
-footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+/* Onboarding */
+.onboard { position: absolute; inset: 0; z-index: 30; background: var(--bg); display: flex; flex-direction: column; overflow-y: auto; }
+.onboard .top { padding: 22px 18px; border-bottom: 1px solid var(--line); }
+.onboard .big { font-size: clamp(52px, 17vw, 76px); }
+.onboard .intro { padding: 18px; display: grid; gap: 10px; border-bottom: 1px solid var(--line); }
+.onboard .intro p { margin: 0; font-size: 17px; line-height: 1.35; }
+.onboard .pick { padding: 18px; display: grid; gap: 12px; flex: 1; align-content: start; }
+.onboard .foot { padding: 14px 18px calc(14px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.btn.lg { padding: 13px 20px; font-size: 12px; }
+.btn:disabled { opacity: 0.35; cursor: default; }
 
-/* Player */
-.player { position: fixed; inset: 0; z-index: 20; background: var(--bg); overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
-.player-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; border-bottom: 2px solid var(--fg); }
-.closebtn { background: var(--fg); color: var(--bg); border: 0; padding: 8px 14px; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; }
-.player-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 32px; padding-block: 28px 48px; }
-.stage { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: var(--accent-soft); overflow: hidden; }
+/* Player: always a dark room, whatever the theme */
+.player { position: absolute; inset: 0; z-index: 20; background: #0b0b0b; color: #f2f2f2; display: flex; flex-direction: column; overflow-y: auto; }
+.player > *, .onboard > * { flex-shrink: 0; }
+.player .bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #2a2a2a; position: sticky; top: 0; background: #0b0b0b; z-index: 1; }
+.player .x { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid #f2f2f2; padding: 6px 10px; }
+.stage { position: relative; width: 100%; aspect-ratio: 16 / 9; max-width: 100%; flex: none; }
 .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.stage .cap { position: absolute; left: 16px; right: 16px; bottom: 14px; font-family: var(--font-display); font-weight: 700; font-size: clamp(1rem, 2.4vw, 1.5rem); line-height: 1.2; text-wrap: balance; }
-.controls { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-.ctl { border: 2px solid var(--fg); background: var(--bg); padding: 8px 12px; font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
-.ctl.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); min-width: 92px; }
-.ctl[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-.time { margin-left: auto; }
-.scrub { position: relative; height: 18px; margin-top: 14px; cursor: pointer; }
-.scrub .track { position: absolute; left: 0; right: 0; top: 7px; height: 4px; background: var(--line); }
-.scrub .fill { position: absolute; left: 0; top: 7px; height: 4px; background: var(--accent); }
-.scrub .tick { position: absolute; top: 2px; width: 2px; height: 14px; background: var(--fg); }
-.p-title { font-family: var(--font-display); font-weight: 800; font-stretch: 105%; font-size: clamp(1.6rem, 3.6vw, 2.5rem); line-height: 1.05; margin: 22px 0 8px; text-wrap: balance; }
-.side { display: grid; gap: 28px; align-content: start; min-width: 0; }
-.chapters { list-style: none; padding: 0; margin: 10px 0 0; border-top: 1px solid var(--line); }
-.chapters button { width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 10px 0; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; }
-.chapters button[aria-current="true"] { color: var(--accent); font-weight: 600; }
-.notes { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 12px; }
-.notes li { padding-left: 14px; border-left: 3px solid var(--accent); }
-.notes .locked { border-left-color: var(--line); color: var(--muted); font-style: italic; }
-.check { border: 2px solid var(--fg); padding: 22px; margin-top: 24px; }
-.check h3 { margin: 6px 0 14px; font-family: var(--font-display); font-stretch: 105%; font-size: 1.35rem; line-height: 1.2; }
-.opts { display: grid; gap: 10px; }
-.opt { text-align: left; border: 2px solid var(--line); background: var(--bg); padding: 12px 14px; }
-.opt:hover:not(:disabled) { border-color: var(--fg); }
-.opt.right { border-color: var(--good); color: var(--good); font-weight: 600; }
-.opt.wrong { border-color: var(--bad); color: var(--bad); }
+.stage .cap { position: absolute; left: 12px; bottom: 10px; right: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+.stage .cap span { background: #000; color: #fff; padding: 3px 6px; }
+.scrub { position: relative; height: 22px; margin: 4px 16px 0; cursor: pointer; }
+.scrub .track { position: absolute; left: 0; right: 0; top: 10px; height: 2px; background: #3a3a3a; }
+.scrub .fill { position: absolute; left: 0; top: 10px; height: 2px; background: #f2f2f2; }
+.scrub .knob { position: absolute; top: 5px; width: 12px; height: 12px; margin-left: -6px; background: #f2f2f2; border-radius: 50%; }
+.scrub .tick { position: absolute; top: 7px; width: 1px; height: 8px; background: #8a8a8a; }
+.ptime { display: flex; justify-content: space-between; padding: 0 16px; font-family: var(--mono); font-size: 11px; color: #9a9a9a; font-variant-numeric: tabular-nums; }
+.pctl { display: flex; align-items: center; justify-content: center; gap: 22px; padding: 12px 16px 6px; }
+.pctl .round { width: 64px; height: 64px; border-radius: 50%; background: #f2f2f2; color: #0b0b0b; display: grid; place-items: center; }
+.pctl .round svg { width: 24px; height: 24px; fill: currentColor; }
+.pctl .skip { font-family: var(--mono); font-size: 12px; width: 48px; height: 48px; border: 1px solid #3a3a3a; border-radius: 50%; display: grid; place-items: center; }
+.pctl .fast { font-family: var(--mono); font-size: 11px; padding: 6px 8px; border: 1px solid #3a3a3a; }
+.pctl .fast[aria-pressed="true"] { background: #f2f2f2; color: #0b0b0b; }
+.pinfo { padding: 14px 16px 8px; display: grid; gap: 8px; }
+.pinfo h2 { margin: 0; font-size: 30px; line-height: 1.05; font-weight: 400; }
+.pinfo p { margin: 0; color: #a5a5a5; }
+.psec { padding: 14px 16px; border-top: 1px solid #2a2a2a; display: grid; gap: 8px; }
+.psec .lab { color: #8a8a8a; }
+.chap { width: 100%; display: grid; grid-template-columns: 52px 1fr; gap: 8px; text-align: left; padding: 8px 0; border-bottom: 1px solid #1f1f1f; color: #a5a5a5; }
+.chap[aria-current="true"] { color: #fff; }
+.chap .mono { color: inherit; }
+.note { padding-left: 12px; border-left: 2px solid #f2f2f2; }
+.note.locked { border-left-color: #3a3a3a; color: #7a7a7a; font-style: italic; }
+.check { margin: 8px 16px 24px; border: 1px solid #f2f2f2; padding: 16px; display: grid; gap: 12px; }
+.check h3 { margin: 0; font-size: 20px; line-height: 1.2; font-weight: 500; }
+.opt { text-align: left; border: 1px solid #3a3a3a; padding: 12px; }
+.opt:hover:not(:disabled) { border-color: #f2f2f2; }
+.opt.right { border-color: #4fd08a; color: #4fd08a; }
+.opt.wrong { border-color: #ff7766; color: #ff7766; }
 .opt:disabled { cursor: default; }
-.verdict { margin: 16px 0 0; }
-.after { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.check .btn { border-color: #f2f2f2; }
+.check .btn.solid { background: #f2f2f2; color: #0b0b0b; }
 
-@media (max-width: 860px) {
-  .hero-row, .player-grid { grid-template-columns: minmax(0, 1fr); }
-  .row { grid-template-columns: 56px minmax(0, 1fr); }
-  .row .pill { grid-column: 2; justify-self: start; }
-}
-@media (max-width: 640px) {
-  .top { position: static; }
-  .top #today { display: none; }
-  .top nav { gap: 14px; }
-}
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
 </head>
 <body style="margin:0">
 
-<header class="top">
-  <div class="wrap">
-    <a class="wordmark" href="#top">Brainfart</a>
-    <nav aria-label="Sections">
-      <a href="#program">Program</a>
-      <a href="#interests">Interests</a>
-      <a href="#path">Your path</a>
-      <a href="#ranking">How it ranks</a>
+<div class="desk">
+  <div class="aside">
+    <div class="logo">Brain<br>fart</div>
+    <p>Five, ten, or fifteen minutes on one idea worth knowing. A daily program that ends, ranked by what you understood.</p>
+    <span class="mono" style="color:var(--muted)">Prototype · sample program</span>
+  </div>
+
+  <div class="device" id="device">
+    <header class="appbar">
+      <span class="logo">Brainfart</span>
+      <div class="right"><span class="mono" id="datebadge"></span></div>
+    </header>
+    <main class="screen" id="screen"></main>
+    <nav class="tabbar" id="tabbar" aria-label="App">
+      <button class="tab" data-tab="today" type="button">
+        <svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="16"/><path d="M3.5 9.5h17M8 2.5v4M16 2.5v4"/></svg><span class="mono">Today</span></button>
+      <button class="tab" data-tab="explore" type="button">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg><span class="mono">Explore</span></button>
+      <button class="tab" data-tab="library" type="button">
+        <svg viewBox="0 0 24 24"><path d="M5 3.5h4v17H5zM10.5 3.5h4v17h-4zM16 4.5l3.6-.9 3 16.5-3.6.9z"/></svg><span class="mono">Library</span></button>
+      <button class="tab" data-tab="you" type="button">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1.4-4 4.4-6 8-6s6.6 2 8 6"/></svg><span class="mono">You</span></button>
     </nav>
-    <span class="mono" id="today"></span>
-  </div>
-</header>
 
-<main id="top">
-  <div class="wrap hero">
-    <h1>Sit with<br>one <span class="ac">idea.</span></h1>
-    <div class="hero-row">
-      <p class="lede">Films of five, ten, or fifteen minutes on things worth knowing. Each day's program is finite and ends. The algorithm ranks by what you understood, not how long you stayed.</p>
-      <div class="timepick">
-        <span class="label" id="time-label">Time I have right now</span>
-        <div class="seg" role="group" aria-labelledby="time-label" id="seg">
-          <button type="button" data-d="5">5′<small>Quick</small></button>
-          <button type="button" data-d="10">10′<small>Coffee</small></button>
-          <button type="button" data-d="15">15′<small>Commute</small></button>
-          <button type="button" data-d="0">All<small>Full day</small></button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <section class="block" id="program" aria-labelledby="program-h">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2 id="program-h">Today's program</h2>
-        <span class="mono" id="program-meta"></span>
-      </div>
-      <div class="program" id="program-grid"></div>
-      <div class="endnote">
-        <div><strong>The program ends.</strong> <span class="hint" style="margin:0">No infinite scroll. When you finish, you're done for the day.</span></div>
-        <span class="label">Sample program · prototype</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="interests" aria-labelledby="int-h">
-    <div class="wrap">
-      <div class="sec-head"><h2 id="int-h">Tune your program</h2><span class="label">Disciplines</span></div>
-      <div class="chips" id="chips"></div>
-      <p class="hint">Your interests weight the program, and one wildcard from outside them is always included. Curiosity needs a little friction.</p>
-    </div>
-  </section>
-
-  <section class="block" id="path" aria-labelledby="path-h">
-    <div class="wrap">
-      <div class="sec-head"><h2 id="path-h">Your path</h2><button type="button" class="linkbtn" id="reset">Reset progress</button></div>
-      <div class="path-summary">
-        <div class="stat"><b id="s-films">0</b><span class="label">Films finished</span></div>
-        <div class="stat"><b id="s-mins">0</b><span class="label">Minutes of focus</span></div>
-        <div class="stat"><b id="s-ideas">0</b><span class="label">Ideas understood</span></div>
-      </div>
-      <div class="rows" id="rows"></div>
-    </div>
-  </section>
-
-  <section class="block" id="ranking" aria-labelledby="rank-h">
-    <div class="wrap">
-      <div class="sec-head"><h2 id="rank-h">How it ranks</h2><span class="label">The anti-feed</span></div>
-      <div class="compare-wrap">
-        <table class="compare">
-          <thead><tr><th scope="col"></th><th scope="col">Engagement feeds</th><th scope="col">Brainfart</th></tr></thead>
-          <tbody>
-            <tr><td>Optimizes for</td><td>Time on app, next swipe</td><td>Understanding, measured by a one-question check after each film</td></tr>
-            <tr><td>Length</td><td>15 to 60 seconds</td><td>5, 10, or 15 minutes, chosen by you up front</td></tr>
-            <tr><td>Supply</td><td>Infinite scroll</td><td>A daily program of six films that ends</td></tr>
-            <tr><td>Social proof</td><td>Likes, views, follower counts</td><td>None shown. Quality is judged by comprehension</td></tr>
-            <tr><td>Explains itself</td><td>No</td><td>Every film says why it's in your program</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="signals">
-        <div class="sig"><div class="bar"><i style="width:40%"></i></div><h4>Understanding · 40%</h4><p>Did you get the check right? Correct answers unlock films that build on that idea.</p></div>
-        <div class="sig"><div class="bar"><i style="width:25%"></i></div><h4>Curiosity · 25%</h4><p>"Go deeper" after a film is a stronger signal than any amount of watch time.</p></div>
-        <div class="sig"><div class="bar"><i style="width:20%"></i></div><h4>Spacing · 20%</h4><p>Related ideas return days later, when recall is due, not right away.</p></div>
-        <div class="sig"><div class="bar"><i style="width:15%"></i></div><h4>Range · 15%</h4><p>One wildcard per day from a discipline you haven't picked.</p></div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <span class="wordmark" style="font-size:1rem">Brainfart</span>
-    <span class="label">Prototype · films and figures are a sample program for demonstration</span>
-  </div>
-</footer>
-
-<div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="p-title" hidden>
-  <div class="wrap">
-    <div class="player-bar">
-      <span class="label" id="p-eyebrow"></span>
-      <button type="button" class="closebtn" id="p-close">Back to program</button>
-    </div>
-    <div class="player-grid">
-      <div style="min-width:0">
-        <div class="stage"><canvas id="p-canvas"></canvas><div class="cap" id="p-cap"></div></div>
-        <div class="scrub" id="p-scrub" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="track"></div><div class="fill" id="p-fill"></div><div id="p-ticks"></div>
-        </div>
-        <div class="controls">
-          <button type="button" class="ctl primary" id="p-play">Play</button>
-          <button type="button" class="ctl" id="p-back">−15s</button>
-          <button type="button" class="ctl" id="p-fwd">+15s</button>
-          <button type="button" class="ctl" id="p-fast" aria-pressed="false" title="Speeds playback so you can preview the whole film">Preview 30×</button>
-          <span class="mono time" id="p-time">00:00 / 00:00</span>
-        </div>
-        <h2 class="p-title" id="p-title"></h2>
-        <p style="margin:0;color:var(--muted);max-width:62ch" id="p-dek"></p>
-        <div class="check" id="p-check" hidden></div>
-      </div>
-      <aside class="side">
-        <div><span class="label">Chapters</span><ul class="chapters" id="p-chapters"></ul></div>
-        <div><span class="label">Notes so far</span><ul class="notes" id="p-notes"></ul></div>
-        <button type="button" class="ctl" id="p-skip">Skip to the check</button>
-      </aside>
-    </div>
+    <section class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="p-title" hidden></section>
+    <section class="onboard" id="onboard" aria-labelledby="ob-title" hidden></section>
   </div>
 </div>
 
@@ -305,8 +243,21 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 (function () {
   "use strict";
 
+  // Each discipline is a series: its own typeface (see .f-* classes) and its own color field.
+  var DISC = {
+    Physics:     { bg: "#2b3bff", ink: "#ffffff", style: "waves" },
+    Mathematics: { bg: "#ffd60a", ink: "#000000", style: "grid" },
+    Biology:     { bg: "#0f9d63", ink: "#000000", style: "network" },
+    Chemistry:   { bg: "#ff8fb1", ink: "#000000", style: "network" },
+    History:     { bg: "#c9b79c", ink: "#000000", style: "orbits" },
+    Acoustics:   { bg: "#ff4f1f", ink: "#000000", style: "waves" },
+    Ecology:     { bg: "#0b4d3a", ink: "#ffffff", style: "orbits" },
+    Space:       { bg: "#000000", ink: "#ffffff", style: "orbits" }
+  };
+  var DISCIPLINES = Object.keys(DISC);
+
   var FILMS = [
-    { id: "sky", d: "Physics", m: 5, style: "waves", title: "Why the sky isn't violet",
+    { id: "sky", d: "Physics", m: 5, title: "Why the sky isn't violet",
       dek: "Air scatters short wavelengths more than long ones. Violet is shorter than blue, so why isn't the sky violet?",
       ch: [[0, "Rayleigh scattering", "Scattering strength rises steeply as wavelength shortens, roughly as 1/λ⁴."],
            [90, "The violet problem", "Sunlight carries less violet than blue, and some violet is absorbed high in the atmosphere."],
@@ -315,21 +266,21 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       q: "Which of these does NOT help explain why the sky looks blue rather than violet?",
       o: ["The sun emits less violet than blue", "Human cones are less sensitive to violet", "Violet light scatters less than blue"], a: 2,
       ex: "Violet actually scatters more than blue. The source spectrum and our eyes do the rest.", builds: [] },
-    { id: "reverb", d: "Acoustics", m: 5, style: "waves", title: "The sound of a room",
+    { id: "reverb", d: "Acoustics", m: 5, title: "The sound of a room",
       dek: "Why a cathedral blurs speech and a recording booth sounds dead.",
       ch: [[0, "Reflections", "Sound bounces off every surface. Reverberation is the decaying sum of those reflections."],
            [100, "RT60", "Engineers measure how long a sound takes to fall by 60 decibels. That number is RT60."],
            [200, "Built for purpose", "Concert halls aim for about 2 seconds. Lecture rooms stay under 1 so speech stays clear."]],
       q: "RT60 is the time it takes a sound to decay by:", o: ["6 dB", "60 dB", "Half its loudness"], a: 1,
       ex: "Sixty decibels, a drop to one millionth of the original sound energy.", builds: ["sky"] },
-    { id: "bread", d: "Chemistry", m: 5, style: "network", title: "Why bread rises",
+    { id: "bread", d: "Chemistry", m: 5, title: "Why bread rises",
       dek: "Yeast makes the gas. Gluten holds it. Heat locks it in.",
       ch: [[0, "Fermentation", "Yeast, a fungus, eats sugars and releases carbon dioxide and ethanol."],
            [100, "The gluten net", "Kneading links glutenin and gliadin into an elastic network that traps the gas."],
            [200, "Oven spring", "In the oven, trapped gas and steam expand fast until the crumb sets."]],
       q: "What traps the gas inside dough?", o: ["Starch granules", "The gluten network", "Salt"], a: 1,
       ex: "Gluten's stretchy protein network holds the bubbles while the dough rises.", builds: ["fungi"] },
-    { id: "antikythera", d: "History", m: 10, style: "orbits", title: "The Antikythera mechanism",
+    { id: "antikythera", d: "History", m: 10, title: "The Antikythera mechanism",
       dek: "A shoebox of bronze gears from around 100 BCE that predicted eclipses.",
       ch: [[0, "The wreck, 1901", "Sponge divers recovered corroded bronze fragments from a Roman-era shipwreck off Antikythera."],
            [150, "Seeing inside", "X-ray CT scans in the 2000s revealed gear trains and thousands of inscribed characters."],
@@ -337,7 +288,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
            [480, "Why it matters", "Nothing of comparable mechanical complexity survives from the next thousand years."]],
       q: "What revealed the mechanism's hidden gearing?", o: ["Taking the fragments apart", "X-ray computed tomography", "An ancient manual describing it"], a: 1,
       ex: "CT scanning let researchers read gears and text sealed inside the corrosion.", builds: ["voyager"] },
-    { id: "bayes", d: "Mathematics", m: 10, style: "grid", title: "Bayes' rule with a deck of cards",
+    { id: "bayes", d: "Mathematics", m: 10, title: "Bayes' rule with a deck of cards",
       dek: "Update a belief by exactly as much as the evidence deserves.",
       ch: [[0, "Prior", "Before you look, a card is a king with probability 4 in 52."],
            [150, "Evidence", "Learn that it's a face card and the space shrinks: 4 kings out of 12 face cards."],
@@ -345,7 +296,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
            [480, "Medical tests", "A 99% accurate test for a rare condition can still produce mostly false positives."]],
       q: "You learn the card is a face card. What's the chance it's a king?", o: ["4 in 52", "1 in 3", "1 in 4"], a: 1,
       ex: "Four kings among twelve face cards: 4/12, or 1 in 3.", builds: [] },
-    { id: "godel", d: "Mathematics", m: 10, style: "grid", title: "Gödel's incompleteness, plainly",
+    { id: "godel", d: "Mathematics", m: 10, title: "Gödel's incompleteness, plainly",
       dek: "Any consistent system strong enough for arithmetic contains true statements it can't prove.",
       ch: [[0, "Hilbert's dream", "In the 1920s Hilbert hoped to ground all of mathematics in one complete, consistent set of axioms."],
            [150, "Numbers about proofs", "Gödel encoded statements as numbers, so arithmetic could describe its own proofs."],
@@ -353,7 +304,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
            [480, "What it doesn't mean", "It isn't a claim that everything is relative. It applies to specific formal systems."]],
       q: "Incompleteness applies to systems that are:", o: ["Inconsistent", "Consistent and able to express basic arithmetic", "Any set of rules at all"], a: 1,
       ex: "Both conditions matter: consistency and enough power to do arithmetic.", builds: ["bayes"] },
-    { id: "fungi", d: "Biology", m: 15, style: "network", title: "What fungi actually trade with trees",
+    { id: "fungi", d: "Biology", m: 15, title: "What fungi actually trade with trees",
       dek: "Mycorrhizal fungi swap nutrients for sugar. The popular 'wood wide web' story goes further than the evidence.",
       ch: [[0, "An old partnership", "Most land plants partner with mycorrhizal fungi, a relationship over 400 million years old."],
            [240, "The trade", "Fungi deliver water, phosphorus and nitrogen. Plants pay in carbon from photosynthesis."],
@@ -361,7 +312,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
            [720, "Reading claims carefully", "Field studies are hard to control, so strong claims about 'mother trees' remain contested."]],
       q: "What do plants mainly give fungi in return?", o: ["Carbon, as sugars and lipids", "Phosphorus", "Water"], a: 0,
       ex: "Plants pay in carbon. Fungi bring back minerals and water.", builds: [] },
-    { id: "birds", d: "Ecology", m: 15, style: "orbits", title: "Birds that navigate by stars",
+    { id: "birds", d: "Ecology", m: 15, title: "Birds that navigate by stars",
       dek: "Many songbirds migrate at night. City light pulls them off course.",
       ch: [[0, "Night migrants", "Most North American songbirds migrate at night."],
            [240, "A star compass", "In 1960s planetarium experiments, indigo buntings oriented by star patterns around the celestial pole."],
@@ -369,7 +320,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
            [720, "Lights out", "Cities that dim lights during peak migration reduce bird deaths."]],
       q: "In planetarium experiments, indigo buntings oriented using:", o: ["The Moon", "Star patterns near the celestial pole", "Magnetic north only"], a: 1,
       ex: "They learned the rotation of the night sky around the pole as young birds.", builds: ["sky"] },
-    { id: "voyager", d: "Space", m: 15, style: "orbits", title: "The Golden Record",
+    { id: "voyager", d: "Space", m: 15, title: "The Golden Record",
       dek: "In 1977 two spacecraft left Earth carrying its sounds, for anyone who finds them.",
       ch: [[0, "A message in a bottle", "Voyager 1 and 2 each carry a gold-plated copper record."],
            [240, "What's on it", "Greetings in 55 languages, music from many cultures, natural sounds, and encoded images."],
@@ -378,280 +329,409 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       q: "The record's cover uses what as a universal unit of time?", o: ["Earth's rotation", "The hydrogen hyperfine transition", "A pulsar's spin"], a: 1,
       ex: "Hydrogen is the most common element, so any finder could reproduce the unit.", builds: [] }
   ];
-  var DISCIPLINES = ["Physics", "Mathematics", "Biology", "Chemistry", "History", "Acoustics", "Ecology", "Space"];
   var byId = {}; FILMS.forEach(function (f) { byId[f.id] = f; });
 
-  // ---- state (per-viewer, in this browser only) ----
-  var KEY = "brainfart.v1";
-  var state = { dur: 0, interests: ["Physics", "Mathematics", "Space", "Biology"], done: {} };
-  try { var saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) state = Object.assign(state, saved); } catch (e) {}
+  // ---- state, kept per viewer in this browser only ----
+  var KEY = "brainfart.app.v2";
+  var state = { tab: "today", dur: 0, interests: [], done: {}, saved: [], onboarded: false, lib: "saved", disc: null };
+  try { var s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) state = Object.assign(state, s); } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
-  function tok(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  // ---- helpers ----
+  function h(tag, attrs) {
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs) { if (k === "text") n.textContent = attrs[k]; else if (k === "on") n.addEventListener("click", attrs[k]); else n.setAttribute(k, attrs[k]); }
+    for (var i = 2; i < arguments.length; i++) { var c = arguments[i]; if (c == null) continue; n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }
+    return n;
+  }
   function fmt(s) { s = Math.max(0, Math.floor(s)); var m = Math.floor(s / 60), r = s % 60; return (m < 10 ? "0" : "") + m + ":" + (r < 10 ? "0" : "") + r; }
-  function el(tag, attrs, text) { var n = document.createElement(tag); if (attrs) for (var k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; return n; }
-  function seedOf(str) { var h = 2166136261; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function seedOf(str) { var x = 2166136261; for (var i = 0; i < str.length; i++) { x ^= str.charCodeAt(i); x = Math.imul(x, 16777619); } return x >>> 0; }
   function rng(seed) { return function () { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  function understood(id) { return !!(state.done[id] && state.done[id].correct); }
+  var ICON = {
+    play: '<svg viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg>',
+    save: '<svg viewBox="0 0 24 24"><path d="M6 3.5h12v17l-6-4.5-6 4.5z"/></svg>'
+  };
+  function svgEl(markup) { var t = document.createElement("template"); t.innerHTML = markup; return t.content.firstChild; }
 
   var now = new Date();
-  document.getElementById("today").textContent = now.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + " · Program " + (Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5));
+  var dayNum = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
+  document.getElementById("datebadge").textContent = now.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + " · No. " + dayNum;
+
+  // ---- artwork: one generative "poster" per film, in its discipline's color field ----
+  var arts = [];
+  function art(f, opts) {
+    var cv = document.createElement("canvas");
+    arts.push({ cv: cv, f: f, p: (opts && opts.p) || 0.4 });
+    return cv;
+  }
+  function paintArt(cv, f, p, t) {
+    var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, hh = cv.clientHeight;
+    if (!w || !hh) return;
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(hh * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(hh * dpr); }
+    var c = cv.getContext("2d"), D = DISC[f.d], ink = D.ink;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.globalAlpha = 1; c.fillStyle = D.bg; c.fillRect(0, 0, w, hh);
+    var r = rng(seedOf(f.id)), i, j;
+    c.strokeStyle = ink; c.fillStyle = ink;
+    if (D.style === "waves") {
+      for (i = 0; i < 14; i++) {
+        var amp = (0.03 + r() * 0.07) * hh, fr = 1 + r() * 3.5, ph = r() * 6 + t * (0.5 + i * 0.07), y0 = hh * (0.08 + i * 0.065);
+        c.lineWidth = i === 6 ? 4 : 1.2; c.globalAlpha = i === 6 ? 1 : 0.7;
+        c.beginPath();
+        for (var x = 0; x <= w; x += 3) { var y = y0 + Math.sin(x / w * fr * Math.PI * 2 + ph) * amp * (0.35 + p); x ? c.lineTo(x, y) : c.moveTo(x, y); }
+        c.stroke();
+      }
+    } else if (D.style === "orbits") {
+      var cx = w * (0.45 + r() * 0.2), cy = hh * (0.42 + r() * 0.1), tilt = -0.35 + r() * 0.2;
+      if (f.d === "Space" || f.d === "Ecology") { for (i = 0; i < 70; i++) { c.globalAlpha = 0.25 + r() * 0.6; c.fillRect(r() * w, r() * hh, 1.5, 1.5); } }
+      for (i = 1; i <= 8; i++) {
+        var rx = i * w * 0.055, ry = rx * (0.42 + r() * 0.15), a = r() * 6 + t * (0.3 + r() * 0.5) / i;
+        c.globalAlpha = 0.6; c.lineWidth = 1;
+        c.beginPath(); c.ellipse(cx, cy, rx, ry, tilt, 0, Math.PI * 2); c.stroke();
+        c.globalAlpha = 1;
+        var px = cx + Math.cos(a) * rx * Math.cos(tilt) - Math.sin(a) * ry * Math.sin(tilt);
+        var py = cy + Math.cos(a) * rx * Math.sin(tilt) + Math.sin(a) * ry * Math.cos(tilt);
+        c.beginPath(); c.arc(px, py, i === 5 ? 6 : 3, 0, Math.PI * 2); c.fill();
+      }
+      c.beginPath(); c.arc(cx, cy, 8 + p * 12, 0, Math.PI * 2); c.fill();
+    } else if (D.style === "network") {
+      var pts = [];
+      for (i = 0; i < 40; i++) pts.push([r() * w, r() * hh, r() * 6]);
+      pts.forEach(function (q) { q[0] += Math.sin(t * 0.5 + q[2]) * 7; q[1] += Math.cos(t * 0.4 + q[2]) * 7; });
+      var lim = w * (0.13 + p * 0.12);
+      c.lineWidth = 1;
+      for (i = 0; i < pts.length; i++) for (j = i + 1; j < pts.length; j++) {
+        var dx = pts[i][0] - pts[j][0], dy = pts[i][1] - pts[j][1], dd = Math.sqrt(dx * dx + dy * dy);
+        if (dd < lim) { c.globalAlpha = 1 - dd / lim; c.beginPath(); c.moveTo(pts[i][0], pts[i][1]); c.lineTo(pts[j][0], pts[j][1]); c.stroke(); }
+      }
+      c.globalAlpha = 1;
+      pts.forEach(function (q, k) { c.beginPath(); c.arc(q[0], q[1], k % 6 === 0 ? 5 : 2, 0, Math.PI * 2); c.fill(); });
+    } else {
+      var n = 12, gs = Math.min(w, hh) / (n + 2), ox = (w - gs * n) / 2, oy = (hh - gs * n) / 2, lit = Math.floor(p * n * n);
+      for (i = 0; i < n; i++) for (j = 0; j < n; j++) {
+        var k = i * n + j, on = ((i * 7 + j * 3 + Math.floor(t)) % 11 === 0) || k < lit;
+        c.globalAlpha = 1;
+        if (on) c.fillRect(ox + j * gs, oy + i * gs, gs * 0.7, gs * 0.7);
+        else c.fillRect(ox + j * gs + gs * 0.3, oy + i * gs + gs * 0.3, gs * 0.12, gs * 0.12);
+      }
+    }
+    c.globalAlpha = 1;
+  }
+  function paintAll() { arts = arts.filter(function (a) { return a.cv.isConnected; }); arts.forEach(function (a) { paintArt(a.cv, a.f, a.p, 0); }); }
 
   // ---- ranking ----
-  function understood(id) { return state.done[id] && state.done[id].correct; }
   function rank() {
     var daySeed = rng(seedOf(now.toDateString()));
     var pool = FILMS.filter(function (f) { return !state.done[f.id] && (!state.dur || f.m === state.dur); });
     pool.forEach(function (f) {
-      var builds = f.builds.filter(understood);
-      f._builds = builds;
+      f._builds = f.builds.filter(understood);
       f._int = state.interests.indexOf(f.d) >= 0;
-      f._score = (f._int ? 2 : 0.6) + (builds.length ? 1.5 : 0) + daySeed() * 0.4;
+      f._wild = false;
+      f._score = (f._int ? 2 : 0.6) + (f._builds.length ? 1.5 : 0) + daySeed() * 0.4;
     });
     pool.sort(function (a, b) { return b._score - a._score; });
     var inside = pool.filter(function (f) { return f._int || f._builds.length; });
     var outside = pool.filter(function (f) { return !(f._int || f._builds.length); });
     var picks = inside.slice(0, 5);
     if (outside.length) { outside[0]._wild = true; picks.push(outside[0]); }
-    if (picks.length < 6) picks = picks.concat(inside.slice(5, 5 + (6 - picks.length)));
-    picks.forEach(function (f) { if (f !== outside[0]) f._wild = false; });
+    if (picks.length < 6) picks = picks.concat(inside.slice(5, 5 + 6 - picks.length));
+    if (picks.length < 6) picks = picks.concat(outside.slice(1, 1 + 6 - picks.length));
     return picks.slice(0, 6);
   }
   function why(f) {
-    if (f._builds.length) return "↳ Builds on “" + byId[f._builds[0]].title + "”, which you understood.";
-    if (f._wild) return "↳ Today's wildcard: outside your usual disciplines.";
-    if (f._int) return "↳ Matches your interest in " + f.d + (state.dur ? " and fits your " + state.dur + " minutes." : ".");
-    return "↳ Fills out today's program.";
+    if (f._builds && f._builds.length) return "Builds on “" + byId[f._builds[0]].title + "”, which you understood.";
+    if (f._wild) return "Today's wildcard, from outside your usual subjects.";
+    if (f._int) return "Because you follow " + f.d + ".";
+    return "Rounds out today's program.";
   }
 
-  // ---- visuals: one generative stage per film, driven by playback position ----
-  function draw(cv, f, p, t) {
-    var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
-    if (!w || !h) return;
-    if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
-    var c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var fg = tok("--fg"), ac = tok("--accent"), soft = tok("--accent-soft");
-    c.fillStyle = soft; c.fillRect(0, 0, w, h);
-    var r = rng(seedOf(f.id)), i, j;
-    c.lineWidth = 1.5;
-    if (f.style === "waves") {
-      for (i = 0; i < 9; i++) {
-        var amp = (0.04 + r() * 0.08) * h, freq = 1 + r() * 4, ph = r() * 6 + t * (0.6 + i * 0.1), y0 = h * (0.12 + i * 0.075);
-        c.strokeStyle = i === 4 ? ac : fg; c.globalAlpha = i === 4 ? 1 : 0.35; c.lineWidth = i === 4 ? 3 : 1.25;
-        c.beginPath();
-        for (var x = 0; x <= w; x += 4) { var y = y0 + Math.sin(x / w * freq * Math.PI * 2 + ph) * amp * (0.3 + p); x ? c.lineTo(x, y) : c.moveTo(x, y); }
-        c.stroke();
-      }
-    } else if (f.style === "orbits") {
-      var cx = w * 0.62, cy = h * 0.45;
-      for (i = 1; i <= 7; i++) {
-        var rx = i * w * 0.06, ry = rx * (0.45 + r() * 0.2), sp = 0.25 + r() * 0.6, a = r() * 6 + t * sp / i;
-        c.globalAlpha = 0.35; c.strokeStyle = fg; c.lineWidth = 1;
-        c.beginPath(); c.ellipse(cx, cy, rx, ry, -0.3, 0, Math.PI * 2); c.stroke();
-        c.globalAlpha = 1; c.fillStyle = i === 4 ? ac : fg;
-        var px = cx + Math.cos(a) * rx * Math.cos(-0.3) - Math.sin(a) * ry * Math.sin(-0.3);
-        var py = cy + Math.cos(a) * rx * Math.sin(-0.3) + Math.sin(a) * ry * Math.cos(-0.3);
-        c.beginPath(); c.arc(px, py, i === 4 ? 7 : 3.5, 0, Math.PI * 2); c.fill();
-      }
-      c.fillStyle = ac; c.beginPath(); c.arc(cx, cy, 10 + p * 10, 0, Math.PI * 2); c.fill();
-    } else if (f.style === "network") {
-      var pts = [];
-      for (i = 0; i < 34; i++) pts.push([r() * w, r() * h * 0.92, r() * 6]);
-      pts.forEach(function (q) { q[0] += Math.sin(t * 0.5 + q[2]) * 8; q[1] += Math.cos(t * 0.4 + q[2]) * 8; });
-      var lim = w * (0.12 + p * 0.14);
-      for (i = 0; i < pts.length; i++) for (j = i + 1; j < pts.length; j++) {
-        var dx = pts[i][0] - pts[j][0], dy = pts[i][1] - pts[j][1], dd = Math.sqrt(dx * dx + dy * dy);
-        if (dd < lim) { c.globalAlpha = 1 - dd / lim; c.strokeStyle = (i % 5 === 0) ? ac : fg; c.beginPath(); c.moveTo(pts[i][0], pts[i][1]); c.lineTo(pts[j][0], pts[j][1]); c.stroke(); }
-      }
-      c.globalAlpha = 1;
-      pts.forEach(function (q, k) { c.fillStyle = k % 5 === 0 ? ac : fg; c.beginPath(); c.arc(q[0], q[1], k % 5 === 0 ? 5 : 2.5, 0, Math.PI * 2); c.fill(); });
-    } else {
-      var n = 13, gs = Math.min(w, h) / (n + 1), ox = w - gs * (n + 0.5), oy = gs * 0.6, lit = Math.floor(p * n * n);
-      for (i = 0; i < n; i++) for (j = 0; j < n; j++) {
-        var k = i * n + j, on = ((i * 7 + j * 3 + Math.floor(t)) % 11 === 0) || k < lit;
-        c.globalAlpha = on ? 1 : 0.3; c.fillStyle = on ? ac : fg;
-        c.fillRect(ox + j * gs, oy + i * gs, on ? gs * 0.6 : gs * 0.18, on ? gs * 0.6 : gs * 0.18);
-      }
+  // ---- shared pieces ----
+  function discName(d, cls) { return h("span", { class: "f-" + d + (cls ? " " + cls : ""), text: d }); }
+
+  function filmCard(f, showWhy) {
+    var D = DISC[f.d];
+    var a = h("button", { class: "art", type: "button", "aria-label": "Play " + f.title + ", " + f.m + " minutes", on: function () { openPlayer(f); } }, art(f));
+    a.appendChild(h("span", { class: "dur", style: "background:" + D.ink + ";color:" + D.bg, text: f.m + " MIN" }));
+    if (state.done[f.id]) a.appendChild(h("span", { class: "done-tag", text: understood(f.id) ? "UNDERSTOOD" : "WATCHED" }));
+    var saved = state.saved.indexOf(f.id) >= 0;
+    var saveBtn = h("button", { class: "btn icon", type: "button", "aria-pressed": String(saved), "aria-label": saved ? "Remove from saved" : "Save for later" }, svgEl(ICON.save));
+    saveBtn.addEventListener("click", function () { toggleSave(f.id); render(); });
+    var playBtn = h("button", { class: "btn solid", type: "button", on: function () { openPlayer(f); } }, svgEl(ICON.play), state.done[f.id] ? "Watch again" : "Watch");
+    return h("article", { class: "film" }, a,
+      h("div", { class: "film-body" },
+        h("div", { class: "film-meta" }, h("span", { class: "mono" }, f.d + " · " + f.ch.length + " chapters")),
+        h("h2", { class: "f-" + f.d, text: f.title }),
+        h("p", { text: f.dek }),
+        showWhy ? h("span", { class: "why", text: "→ " + why(f) }) : null,
+        h("div", { class: "actions" }, playBtn, saveBtn)));
+  }
+  function toggleSave(id) { var i = state.saved.indexOf(id); if (i >= 0) state.saved.splice(i, 1); else state.saved.push(id); save(); }
+
+  function rowFor(f) {
+    var d = state.done[f.id];
+    var btn = h("button", { class: "row", type: "button", on: function () { openPlayer(f); } },
+      h("span", { class: "thumb" }, art(f, { p: 0.5 })),
+      h("span", null, h("span", { class: "t f-" + f.d, style: "display:block", text: f.title }), h("span", { class: "mono", style: "color:var(--muted)", text: f.d + " · " + f.m + " min" })),
+      d ? h("span", { class: "pill " + (d.correct ? "ok" : "no"), text: d.correct ? "Understood" : "Review" }) : h("span", { class: "mono", text: f.m + "′" }));
+    return btn;
+  }
+
+  // ---- screens ----
+  var screen = document.getElementById("screen");
+
+  function renderToday() {
+    var picks = rank(), mins = picks.reduce(function (s, f) { return s + f.m; }, 0);
+    var seg = h("div", { class: "timeseg", role: "group", "aria-label": "Time I have" });
+    [[5, "5 MIN"], [10, "10 MIN"], [15, "15 MIN"], [0, "ALL"]].forEach(function (o) {
+      seg.appendChild(h("button", { type: "button", "aria-pressed": String(state.dur === o[0]), text: o[1], on: function () { state.dur = o[0]; save(); render(); } }));
+    });
+    var frag = h("div", null,
+      h("div", { class: "today-head" },
+        h("span", { class: "mono", text: "Program No. " + dayNum + " · " + now.toLocaleDateString("en-US", { weekday: "long" }) }),
+        h("h1", { text: "Today" }),
+        h("p", { text: picks.length ? picks.length + (picks.length === 1 ? " film, " : " films, ") + mins + " minutes. It ends at midnight." : "Nothing left in this length today." }),
+        h("div", { style: "display:grid;gap:6px" }, h("span", { class: "mono", style: "color:var(--muted)", text: "Time I have" }), seg)));
+    picks.forEach(function (f) { frag.appendChild(filmCard(f, true)); });
+    var allDone = FILMS.every(function (f) { return state.done[f.id]; });
+    frag.appendChild(h("div", { class: "end" },
+      h("b", { text: allDone ? "You finished today's program." : "That's the whole program." }),
+      h("span", { text: allDone ? "Come back tomorrow for a new one." : "No infinite scroll. When it's done, you're done for the day." })));
+    return frag;
+  }
+
+  function renderExplore() {
+    if (state.disc) {
+      var d = state.disc, D = DISC[d], list = FILMS.filter(function (f) { return f.d === d; });
+      var frag = h("div", null,
+        h("div", { class: "backrow" }, h("button", { class: "mono", type: "button", text: "← All subjects", on: function () { state.disc = null; save(); render(); } })),
+        h("div", { class: "disc-hero", style: "background:" + D.bg + ";color:" + D.ink },
+          h("span", { class: "mono", text: "Series · " + list.length + " films" }),
+          h("div", { class: "nm f-" + d, style: "margin-top:10px", text: d })));
+      list.forEach(function (f) { frag.appendChild(filmCard(f, false)); });
+      return frag;
     }
-    c.globalAlpha = 1;
+    var tiles = h("div", { class: "tiles" });
+    DISCIPLINES.forEach(function (d) {
+      var D = DISC[d], n = FILMS.filter(function (f) { return f.d === d; }).length;
+      tiles.appendChild(h("button", { class: "tile", type: "button", style: "background:" + D.bg + ";color:" + D.ink, on: function () { state.disc = d; save(); render(); screen.scrollTop = 0; } },
+        h("span", { class: "mono", text: n + (n === 1 ? " film" : " films") }),
+        h("span", { class: "nm f-" + d, text: d })));
+    });
+    return h("div", null, h("div", { class: "sec-title" }, h("h1", { text: "Explore" }), h("span", { class: "mono", text: DISCIPLINES.length + " series" })), tiles);
   }
 
-  // ---- render page ----
-  var seg = document.getElementById("seg");
-  seg.addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
-    state.dur = +b.dataset.d; save(); renderAll();
+  function renderLibrary() {
+    var seg = h("div", { class: "subseg", role: "group", "aria-label": "Library view" });
+    [["saved", "Saved"], ["finished", "Finished"]].forEach(function (o) {
+      seg.appendChild(h("button", { type: "button", "aria-pressed": String(state.lib === o[0]), text: o[1], on: function () { state.lib = o[0]; save(); render(); } }));
+    });
+    var ids = state.lib === "saved" ? state.saved.slice().reverse() : Object.keys(state.done).sort(function (a, b) { return state.done[b].at - state.done[a].at; });
+    var list = h("div", { style: "border-top:1px solid var(--line)" });
+    if (!ids.length) list.appendChild(h("div", { class: "empty", text: state.lib === "saved" ? "Tap the bookmark on any film to save it here for later." : "Films you finish show up here with how your check went." }));
+    ids.forEach(function (id) { if (byId[id]) list.appendChild(rowFor(byId[id])); });
+    return h("div", null, h("div", { class: "sec-title" }, h("h1", { text: "Library" })), seg, list);
+  }
+
+  function renderYou() {
+    var ids = Object.keys(state.done);
+    var mins = ids.reduce(function (s, id) { return s + byId[id].m; }, 0);
+    var chips = h("div", { class: "chips" });
+    DISCIPLINES.forEach(function (d) {
+      chips.appendChild(h("button", { class: "chip f-" + d, type: "button", "aria-pressed": String(state.interests.indexOf(d) >= 0), text: d, on: function () {
+        var i = state.interests.indexOf(d); if (i >= 0) state.interests.splice(i, 1); else state.interests.push(d); save(); render();
+      } }));
+    });
+    function sig(name, pct, note) { return h("div", { class: "sig" }, h("b", { text: name }), h("span", { class: "mono", text: pct + "%" }), h("div", { class: "bar" }, h("i", { style: "width:" + pct + "%" })), h("small", { text: note })); }
+    return h("div", null,
+      h("div", { class: "sec-title" }, h("h1", { text: "You" })),
+      h("div", { class: "stats" },
+        h("div", { class: "stat" }, h("b", { text: String(ids.length) }), h("span", { class: "mono", text: "Films" })),
+        h("div", { class: "stat" }, h("b", { text: String(mins) }), h("span", { class: "mono", text: "Minutes" })),
+        h("div", { class: "stat" }, h("b", { text: String(ids.filter(understood).length) }), h("span", { class: "mono", text: "Understood" }))),
+      h("div", { class: "block" }, h("h3", { text: "Subjects you follow" }), chips,
+        h("small", { style: "color:var(--muted)", text: "These weight your program. One wildcard from outside them is always included." })),
+      h("div", { class: "block" }, h("h3", { text: "How your program is ranked" }),
+        sig("Understanding", 40, "Getting the check right moves films that build on that idea up your program."),
+        sig("Curiosity", 25, "Tapping “Go deeper” counts for more than any amount of watch time."),
+        sig("Spacing", 20, "Related ideas come back days later, when recall is due."),
+        sig("Range", 15, "One wildcard a day from a subject you don't follow."),
+        h("small", { style: "color:var(--muted)", text: "No likes, no view counts, no autoplay." })),
+      h("div", { class: "block" },
+        h("button", { class: "linkbtn", type: "button", text: "Start over (clears progress on this device)", on: function () {
+          state = { tab: "today", dur: 0, interests: [], done: {}, saved: [], onboarded: false, lib: "saved", disc: null }; save(); render();
+        } })));
+  }
+
+  var tabbar = document.getElementById("tabbar");
+  tabbar.addEventListener("click", function (e) {
+    var b = e.target.closest(".tab"); if (!b) return;
+    if (state.tab === b.dataset.tab && b.dataset.tab === "explore") state.disc = null;
+    state.tab = b.dataset.tab; save(); render(); screen.scrollTop = 0;
   });
 
-  function renderSeg() { [].forEach.call(seg.children, function (b) { b.setAttribute("aria-pressed", String(+b.dataset.d === state.dur)); }); }
-
-  function renderProgram() {
-    var grid = document.getElementById("program-grid"); grid.textContent = "";
-    var picks = rank();
-    var mins = picks.reduce(function (s, f) { return s + f.m; }, 0);
-    document.getElementById("program-meta").textContent = picks.length + (picks.length === 1 ? " film · " : " films · ") + mins + " min · ends at midnight";
-    if (!picks.length) {
-      var allDone = FILMS.every(function (f) { return state.done[f.id]; });
-      var msg = el("p", { class: "hint", style: "margin:0;font-size:1.15rem" }, allDone ? "That's today's program. You watched all of it. Come back tomorrow for a new one." : "Nothing left at " + state.dur + " minutes today. Pick another length above.");
-      grid.appendChild(msg); return;
-    }
-    picks.forEach(function (f) {
-      var art = el("article", { class: "film" });
-      var th = el("button", { class: "thumb", type: "button", "aria-label": "Watch " + f.title + ", " + f.m + " minutes" });
-      var cv = el("canvas"); th.appendChild(cv);
-      th.appendChild(el("span", { class: "mins", "aria-hidden": "true" }, f.m + "′"));
-      th.appendChild(el("span", { class: "play", "aria-hidden": "true" }, "Watch"));
-      th.addEventListener("click", function () { openPlayer(f); });
-      art.appendChild(th);
-      art.appendChild(el("span", { class: "label" }, f.d + " · " + f.ch.length + " chapters"));
-      art.appendChild(el("h3", null, f.title));
-      art.appendChild(el("p", null, f.dek));
-      art.appendChild(el("span", { class: "why" }, why(f)));
-      grid.appendChild(art);
-      requestAnimationFrame(function () { draw(cv, f, 0.35, 0); });
-    });
+  function render() {
+    [].forEach.call(tabbar.children, function (b) { if (b.dataset.tab === state.tab) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+    screen.textContent = "";
+    var view = state.tab === "explore" ? renderExplore() : state.tab === "library" ? renderLibrary() : state.tab === "you" ? renderYou() : renderToday();
+    screen.appendChild(view);
+    renderOnboard();
+    requestAnimationFrame(paintAll);
   }
 
-  function renderChips() {
-    var box = document.getElementById("chips"); box.textContent = "";
+  // ---- onboarding ----
+  var onboard = document.getElementById("onboard");
+  var pickSet = [];
+  function renderOnboard() {
+    onboard.hidden = !!state.onboarded;
+    if (state.onboarded) return;
+    if (!pickSet.length && state.interests.length) pickSet = state.interests.slice();
+    onboard.textContent = "";
+    var chips = h("div", { class: "chips" });
     DISCIPLINES.forEach(function (d) {
-      var b = el("button", { type: "button", class: "chip", "aria-pressed": String(state.interests.indexOf(d) >= 0) }, d);
-      b.addEventListener("click", function () {
-        var i = state.interests.indexOf(d);
-        if (i >= 0) state.interests.splice(i, 1); else state.interests.push(d);
-        save(); renderAll();
-      });
-      box.appendChild(b);
+      chips.appendChild(h("button", { class: "chip f-" + d, type: "button", "aria-pressed": String(pickSet.indexOf(d) >= 0), text: d, on: function () {
+        var i = pickSet.indexOf(d); if (i >= 0) pickSet.splice(i, 1); else pickSet.push(d); renderOnboard();
+      } }));
     });
+    var start = h("button", { class: "btn solid lg", type: "button", text: pickSet.length ? "Build my program" : "Pick at least one", on: function () {
+      state.interests = pickSet.slice(); state.onboarded = true; state.tab = "today"; save(); render();
+    } });
+    if (!pickSet.length) start.disabled = true;
+    onboard.appendChild(h("div", { class: "top" }, h("div", { class: "logo big", id: "ob-title" }, "Brain", h("br"), "fart")));
+    onboard.appendChild(h("div", { class: "intro" },
+      h("p", { text: "One idea at a time, in five, ten, or fifteen minutes." }),
+      h("p", { style: "color:var(--muted)", text: "Each day you get a short program that ends. After every film, one question. Your answers, not your screen time, decide what comes next." })));
+    onboard.appendChild(h("div", { class: "pick" }, h("span", { class: "mono", text: "What do you want to understand?" }), chips));
+    onboard.appendChild(h("div", { class: "foot" },
+      h("button", { class: "linkbtn", type: "button", text: "Skip", on: function () { state.interests = ["Physics", "Mathematics", "Space", "Biology"]; state.onboarded = true; save(); render(); } }),
+      start));
   }
-
-  function renderPath() {
-    var ids = Object.keys(state.done).sort(function (a, b) { return state.done[b].at - state.done[a].at; });
-    document.getElementById("s-films").textContent = ids.length;
-    document.getElementById("s-mins").textContent = ids.reduce(function (s, id) { return s + byId[id].m; }, 0);
-    document.getElementById("s-ideas").textContent = ids.filter(understood).length;
-    var rows = document.getElementById("rows"); rows.textContent = "";
-    if (!ids.length) { rows.appendChild(el("div", { class: "empty" }, "Finish a film and take its one-question check. It will show up here, and films that build on it move up your program.")); return; }
-    ids.forEach(function (id) {
-      var f = byId[id], d = state.done[id];
-      var row = el("div", { class: "row" });
-      row.appendChild(el("span", { class: "mono" }, f.m + " min"));
-      var mid = el("div"); mid.appendChild(el("div", { class: "t" }, f.title)); mid.appendChild(el("span", { class: "label" }, f.d)); row.appendChild(mid);
-      row.appendChild(el("span", { class: "pill " + (d.correct ? "ok" : "no") }, d.correct ? "Understood" : "Review again"));
-      rows.appendChild(row);
-    });
-  }
-
-  function renderAll() { renderSeg(); renderProgram(); renderChips(); renderPath(); }
-
-  document.getElementById("reset").addEventListener("click", function () { state.done = {}; save(); renderAll(); });
 
   // ---- player ----
-  var P = { f: null, t: 0, playing: false, fast: false, last: 0, raf: 0, answered: false };
-  var $ = function (id) { return document.getElementById(id); };
-  var player = $("player"), pc = $("p-canvas");
+  var player = document.getElementById("player");
+  var P = { f: null, t: 0, playing: false, fast: false, last: 0, raf: 0, answered: false, checkOpen: false };
+  var refs = {};
 
   function curChapter() { var c = 0; P.f.ch.forEach(function (x, i) { if (P.t >= x[0]) c = i; }); return c; }
 
   function openPlayer(f) {
-    P.f = f; P.t = 0; P.playing = false; P.answered = false;
-    $("p-eyebrow").textContent = f.d + " · " + f.m + " minutes";
-    $("p-title").textContent = f.title; $("p-dek").textContent = f.dek;
-    $("p-check").hidden = true; $("p-check").textContent = "";
-    var ticks = $("p-ticks"); ticks.textContent = "";
-    f.ch.forEach(function (x) { if (x[0]) { var tk = el("div", { class: "tick" }); tk.style.left = (x[0] / (f.m * 60) * 100) + "%"; ticks.appendChild(tk); } });
-    var ul = $("p-chapters"); ul.textContent = "";
-    f.ch.forEach(function (x, i) {
-      var li = el("li"), b = el("button", { type: "button" });
-      b.appendChild(el("span", { class: "mono" }, fmt(x[0]))); b.appendChild(el("span", null, x[1]));
-      b.addEventListener("click", function () { seek(x[0]); });
-      li.appendChild(b); ul.appendChild(li);
+    P.f = f; P.t = 0; P.playing = false; P.answered = false; P.checkOpen = false; P.last = 0;
+    var dur = f.m * 60;
+    player.textContent = "";
+    refs.canvas = document.createElement("canvas");
+    refs.cap = h("span");
+    refs.fill = h("div", { class: "fill" });
+    refs.knob = h("div", { class: "knob" });
+    refs.scrub = h("div", { class: "scrub", role: "slider", tabindex: "0", "aria-label": "Seek", "aria-valuemin": "0", "aria-valuemax": String(dur), "aria-valuenow": "0" }, h("div", { class: "track" }), refs.fill);
+    f.ch.forEach(function (x) { if (x[0]) refs.scrub.appendChild(h("div", { class: "tick", style: "left:" + (x[0] / dur * 100) + "%" })); });
+    refs.scrub.appendChild(refs.knob);
+    refs.scrub.addEventListener("click", function (e) { var r = this.getBoundingClientRect(); seek((e.clientX - r.left) / r.width * dur); });
+    refs.scrub.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") { seek(P.t + 15); e.preventDefault(); }
+      if (e.key === "ArrowLeft") { seek(P.t - 15); e.preventDefault(); }
     });
-    player.hidden = false; document.body.style.overflow = "hidden";
-    $("p-close").focus();
-    tick(performance.now());
-  }
-  function closePlayer() {
-    P.playing = false; cancelAnimationFrame(P.raf); player.hidden = true; document.body.style.overflow = "";
-    renderAll();
-  }
-  function seek(s) { P.t = Math.max(0, Math.min(P.f.m * 60, s)); if (P.t >= P.f.m * 60) finish(); paint(); }
-  function finish() { P.playing = false; if (!P.answered && $("p-check").hidden) showCheck(); }
+    refs.cur = h("span"); refs.left = h("span");
+    refs.play = h("button", { class: "round", type: "button", "aria-label": "Play", on: togglePlay });
+    refs.fast = h("button", { class: "fast", type: "button", "aria-pressed": String(P.fast), title: "Preview the whole film quickly", text: "30×", on: function () { P.fast = !P.fast; this.setAttribute("aria-pressed", String(P.fast)); } });
+    refs.chapters = h("div");
+    refs.notes = h("div", { style: "display:grid;gap:10px" });
+    refs.check = h("div", { class: "check", hidden: "" });
+    f.ch.forEach(function (x) { refs.chapters.appendChild(h("button", { class: "chap", type: "button", on: function () { seek(x[0]); } }, h("span", { class: "mono", text: fmt(x[0]) }), h("span", { text: x[1] }))); });
 
+    player.appendChild(h("div", { class: "bar" },
+      h("span", { class: "mono", style: "color:#9a9a9a", text: f.d + " · " + f.m + " min" }),
+      h("button", { class: "x", type: "button", text: "Close", on: closePlayer })));
+    player.appendChild(h("div", { class: "stage" }, refs.canvas, h("div", { class: "cap" }, refs.cap)));
+    player.appendChild(refs.scrub);
+    player.appendChild(h("div", { class: "ptime" }, refs.cur, refs.left));
+    player.appendChild(h("div", { class: "pctl" },
+      h("button", { class: "skip", type: "button", "aria-label": "Back 15 seconds", text: "−15", on: function () { seek(P.t - 15); } }),
+      refs.play,
+      h("button", { class: "skip", type: "button", "aria-label": "Forward 15 seconds", text: "+15", on: function () { seek(P.t + 15); } }),
+      refs.fast));
+    player.appendChild(h("div", { class: "pinfo" }, h("h2", { class: "f-" + f.d, id: "p-title", text: f.title }), h("p", { text: f.dek })));
+    player.appendChild(refs.check);
+    player.appendChild(h("div", { class: "psec" }, h("span", { class: "mono lab", text: "Chapters" }), refs.chapters));
+    player.appendChild(h("div", { class: "psec" }, h("span", { class: "mono lab", text: "Notes so far" }), refs.notes));
+    player.appendChild(h("div", { class: "psec", style: "padding-bottom:28px" }, h("button", { class: "btn", type: "button", style: "border-color:#f2f2f2;justify-self:start", text: "Skip to the question", on: function () { P.playing = false; showCheck(); } })));
+
+    player.hidden = false; player.scrollTop = 0;
+    refs.play.focus();
+    cancelAnimationFrame(P.raf); P.raf = requestAnimationFrame(tick);
+  }
+  function closePlayer() { P.playing = false; cancelAnimationFrame(P.raf); player.hidden = true; render(); }
+  function togglePlay() {
+    if (P.t >= P.f.m * 60) { P.t = 0; }
+    P.playing = !P.playing; P.last = 0;
+  }
+  function seek(s) { P.t = Math.max(0, Math.min(P.f.m * 60, s)); if (P.t >= P.f.m * 60) { P.playing = false; showCheck(); } paint(); }
+
+  var lastCi = -1;
   function paint() {
     var f = P.f, dur = f.m * 60, p = P.t / dur, ci = curChapter();
-    draw(pc, f, p, P.t * 0.6);
-    $("p-fill").style.width = (p * 100) + "%";
-    $("p-scrub").setAttribute("aria-valuenow", String(Math.round(p * 100)));
-    $("p-time").textContent = fmt(P.t) + " / " + fmt(dur);
-    $("p-play").textContent = P.playing ? "Pause" : (P.t >= dur ? "Replay" : "Play");
-    $("p-cap").textContent = f.ch[ci][1];
-    [].forEach.call($("p-chapters").querySelectorAll("button"), function (b, i) { b.setAttribute("aria-current", String(i === ci)); });
-    var notes = $("p-notes"); notes.textContent = "";
-    f.ch.forEach(function (x, i) {
-      if (i <= ci) notes.appendChild(el("li", null, x[2]));
-      else if (i === ci + 1) notes.appendChild(el("li", { class: "locked" }, "Next note appears at " + fmt(x[0]) + "."));
-    });
+    paintArt(refs.canvas, f, p, P.t * 0.6);
+    refs.fill.style.width = (p * 100) + "%"; refs.knob.style.left = (p * 100) + "%";
+    refs.scrub.setAttribute("aria-valuenow", String(Math.round(P.t)));
+    refs.cur.textContent = fmt(P.t); refs.left.textContent = "−" + fmt(dur - P.t);
+    var wantPause = P.playing;
+    if (refs.play.dataset.state !== String(wantPause)) {
+      refs.play.dataset.state = String(wantPause); refs.play.innerHTML = wantPause ? ICON.pause : ICON.play;
+      refs.play.setAttribute("aria-label", wantPause ? "Pause" : "Play");
+    }
+    if (ci !== lastCi || refs.notes.dataset.f !== f.id) {
+      lastCi = ci; refs.notes.dataset.f = f.id;
+      refs.cap.textContent = (ci + 1) + "/" + f.ch.length + " " + f.ch[ci][1];
+      [].forEach.call(refs.chapters.children, function (b, i) { b.setAttribute("aria-current", String(i === ci)); });
+      refs.notes.textContent = "";
+      f.ch.forEach(function (x, i) {
+        if (i <= ci) refs.notes.appendChild(h("div", { class: "note", text: x[2] }));
+        else if (i === ci + 1) refs.notes.appendChild(h("div", { class: "note locked", text: "Next note at " + fmt(x[0]) + "." }));
+      });
+    }
   }
   function tick(ts) {
     var dt = P.last ? (ts - P.last) / 1000 : 0; P.last = ts;
-    if (P.playing) { P.t += dt * (P.fast ? 30 : 1); if (P.t >= P.f.m * 60) { P.t = P.f.m * 60; finish(); } }
+    if (P.playing) { P.t += dt * (P.fast ? 30 : 1); if (P.t >= P.f.m * 60) { P.t = P.f.m * 60; P.playing = false; showCheck(); } }
     paint();
     if (!player.hidden) P.raf = requestAnimationFrame(tick);
   }
 
   function showCheck() {
-    var f = P.f, box = $("p-check"); box.textContent = ""; box.hidden = false;
-    box.appendChild(el("span", { class: "label" }, "One-question check · this is how the program learns"));
-    box.appendChild(el("h3", null, f.q));
-    var opts = el("div", { class: "opts" });
-    f.o.forEach(function (o, i) {
-      var b = el("button", { type: "button", class: "opt" }, o);
-      b.addEventListener("click", function () { answer(i); });
-      opts.appendChild(b);
-    });
+    if (P.checkOpen) return;
+    P.checkOpen = true;
+    var f = P.f, box = refs.check; box.textContent = ""; box.hidden = false;
+    box.appendChild(h("span", { class: "mono", style: "color:#9a9a9a", text: "One question · this is how your program learns" }));
+    box.appendChild(h("h3", { text: f.q }));
+    var opts = h("div", { style: "display:grid;gap:8px" });
+    f.o.forEach(function (o, i) { opts.appendChild(h("button", { class: "opt", type: "button", text: o, on: function () { answer(i); } })); });
     box.appendChild(opts);
-    box.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    box.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   function answer(i) {
-    var f = P.f, ok = i === f.a, box = $("p-check");
-    P.answered = true;
+    var f = P.f, ok = i === f.a, box = refs.check;
+    if (P.answered) return; P.answered = true;
     [].forEach.call(box.querySelectorAll(".opt"), function (b, k) { b.disabled = true; if (k === f.a) b.classList.add("right"); else if (k === i) b.classList.add("wrong"); });
     state.done[f.id] = { correct: ok, at: Date.now() }; save();
-    var unlock = FILMS.filter(function (g) { return g.builds.indexOf(f.id) >= 0; });
-    var v = el("p", { class: "verdict" });
-    v.appendChild(el("strong", { style: "color:var(" + (ok ? "--good" : "--bad") + ")" }, ok ? "Right. " : "Not quite. "));
-    v.appendChild(document.createTextNode(f.ex + (ok && unlock.length ? " This moves “" + unlock[0].title + "” up your program." : ok ? "" : " It will come back for review in a few days.")));
-    box.appendChild(v);
-    var after = el("div", { class: "after" });
-    var deeper = el("button", { type: "button", class: "ctl primary" }, "Go deeper on " + f.d);
-    deeper.addEventListener("click", function () { if (state.interests.indexOf(f.d) < 0) state.interests.push(f.d); save(); closePlayer(); });
-    var back = el("button", { type: "button", class: "ctl" }, "Back to program");
-    back.addEventListener("click", closePlayer);
-    after.appendChild(deeper); after.appendChild(back); box.appendChild(after);
+    var next = FILMS.filter(function (g) { return g.builds.indexOf(f.id) >= 0; })[0];
+    box.appendChild(h("p", { style: "margin:0" },
+      h("b", { style: "color:" + (ok ? "#4fd08a" : "#ff7766"), text: ok ? "Right. " : "Not quite. " }),
+      f.ex + (ok && next ? " “" + next.title + "” moves up your program." : ok ? "" : " It'll come back for review in a few days.")));
+    box.appendChild(h("div", { class: "actions" },
+      h("button", { class: "btn solid", type: "button", text: "Go deeper", on: function () { if (state.interests.indexOf(f.d) < 0) state.interests.push(f.d); save(); closePlayer(); } }),
+      h("button", { class: "btn", type: "button", text: "Done", on: closePlayer })));
   }
 
-  $("p-play").addEventListener("click", function () { if (P.t >= P.f.m * 60) { P.t = 0; $("p-check").hidden = true; P.answered = false; } P.playing = !P.playing; P.last = 0; });
-  $("p-back").addEventListener("click", function () { seek(P.t - 15); });
-  $("p-fwd").addEventListener("click", function () { seek(P.t + 15); });
-  $("p-fast").addEventListener("click", function () { P.fast = !P.fast; this.setAttribute("aria-pressed", String(P.fast)); });
-  $("p-skip").addEventListener("click", function () { P.playing = false; if ($("p-check").hidden) showCheck(); });
-  $("p-close").addEventListener("click", closePlayer);
-  $("p-scrub").addEventListener("click", function (e) { var r = this.getBoundingClientRect(); seek((e.clientX - r.left) / r.width * P.f.m * 60); });
-  $("p-scrub").addEventListener("keydown", function (e) {
-    if (e.key === "ArrowRight") { seek(P.t + 15); e.preventDefault(); }
-    if (e.key === "ArrowLeft") { seek(P.t - 15); e.preventDefault(); }
-  });
   document.addEventListener("keydown", function (e) {
     if (player.hidden) return;
     if (e.key === "Escape") closePlayer();
-    if (e.key === " " && e.target === document.body) { e.preventDefault(); $("p-play").click(); }
+    if (e.key === " " && (e.target === document.body || e.target === refs.scrub)) { e.preventDefault(); togglePlay(); }
   });
 
-  try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderProgram); } catch (e) {}
-  new MutationObserver(renderProgram).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(renderProgram, 150); });
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(paintAll, 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(paintAll);
 
-  renderAll();
+  render();
 })();
 </script>
 </body>
