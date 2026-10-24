@@ -1,0 +1,270 @@
+<title>Can't Be Prompted</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a fixed 1920x1080 stage scaled to fit, one idea on screen at a time, captions underneath. */
+@font-face{font-family:"Archivo V";src:url(__FONT_ARCHIVO__) format("woff2");font-weight:100 900;font-stretch:62% 125%}
+@font-face{font-family:"Newsreader L";font-style:italic;font-weight:400;src:url(__FONT_NEWS__) format("woff2")}
+@font-face{font-family:"JB Mono";font-weight:500;src:url(__FONT_MONO__) format("woff2")}
+:root{
+  --ink:#12192B; --ink-2:#2C3550; --cast:#E8EAEE; --cast-2:#D3D7DF;
+  --amber:#F4A43A; --amber-deep:#8A4B05; --xray:#8FB4FF; --muted:#8A93A8; --muted-deep:#5B6478;
+  --display:"Archivo V","Archivo","Helvetica Neue",Arial,sans-serif;
+  --quote:"Newsreader L","Newsreader",Georgia,serif;
+  --mono:"JB Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  --page:#0B1020; --page-fg:#E8EAEE;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--page);color:var(--page-fg);font-family:var(--display);margin:0;overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.frame{position:relative;width:100%;max-width:min(100%,calc((100vh - 110px)*16/9));aspect-ratio:16/9;overflow:hidden;border-radius:6px}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:var(--ink)}
+.bg{position:absolute;inset:0}
+.chrome{position:absolute;left:120px;right:120px;top:72px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:22px;letter-spacing:.12em;z-index:5}
+.cap{position:absolute;left:120px;right:120px;bottom:70px;font-family:var(--mono);font-size:30px;line-height:1.35;z-index:5;max-width:1500px;min-height:82px}
+.prog{position:absolute;left:0;bottom:0;height:6px;background:var(--amber);z-index:6}
+.beat{position:absolute;left:120px;right:120px;top:150px;bottom:200px;display:flex;flex-direction:column;justify-content:center;gap:40px}
+.big{font-weight:800;font-stretch:118%;letter-spacing:-.02em;line-height:.95;margin:0;text-wrap:balance}
+.big .ln{display:block}
+.q{font-family:var(--quote);font-style:italic;color:var(--amber)}
+.mono{font-family:var(--mono);letter-spacing:.08em}
+.key{font-family:var(--mono);font-size:72px;padding:26px 40px;border:4px solid currentColor;border-radius:16px;display:inline-block}
+.bub{max-width:760px;padding:30px 40px;font-size:48px;border-radius:40px}
+.controls{display:flex;align-items:center;gap:14px;width:100%;max-width:min(100%,calc((100vh - 110px)*16/9));font-family:var(--mono);font-size:13px}
+.controls button{font:inherit;font-size:14px;min-width:88px;min-height:44px;border-radius:22px;border:1px solid var(--muted);background:transparent;color:var(--page-fg);cursor:pointer}
+.controls button:focus-visible,.controls input:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.controls input{flex:1;min-width:0;accent-color:var(--amber)}
+.controls output{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+body.render{padding:0;display:block}
+body.render .frame{max-width:none;width:1920px;height:1080px;border-radius:0}
+body.render .controls{display:none}
+</style>
+
+<div class="frame" id="frame"><div id="stage">
+  <div class="bg" id="bgA"></div><div class="bg" id="bgB"></div>
+  <div class="chrome" id="chrome"><span id="lab"></span><span id="tc"></span></div>
+  <div id="beats"></div>
+  <div class="cap" id="cap"></div>
+  <div class="prog" id="prog"></div>
+</div></div>
+<div class="controls">
+  <button id="play" type="button">Play</button>
+  <input id="scrub" type="range" min="0" max="720" step="0.1" value="0" aria-label="Position">
+  <output id="clock">0:00 / 12:00</output>
+</div>
+
+<script>
+const TL = __TIMELINE__;
+const TOTAL = TL.total;
+const THEME = {ink:{bg:'#12192B',fg:'#E8EAEE',dim:'#8A93A8',acc:'#F4A43A',line:'#2C3550'},cast:{bg:'#E8EAEE',fg:'#12192B',dim:'#5B6478',acc:'#8A4B05',line:'#D3D7DF'}};
+const SCENE_THEME = {'01':'ink','02':'cast','03':'ink','04':'cast','05':'cast','06':'ink','07':'cast','08':'ink','09':'cast','10':'ink'};
+
+// Beats: what fills the screen, keyed to the sentence that triggers it.
+const BEATS = {
+ '01':[
+  {at:'In August I broke my arm', k:'big', text:'In August\nI broke my arm.', size:200},
+  {at:'six to eight weeks', k:'weeks'},
+  {at:'Six to eight weeks sounds short', k:'quote', text:'Six to eight weeks sounds short when somebody else says it.'},
+  {at:'The problem was everything around it', k:'big', text:'The problem was\neverything around it.', size:150},
+ ],
+ '02':[
+  {at:'clearly designed for someone with two hands', k:'big', text:'A world built\nfor two hands.', size:190},
+  {at:'Opening a jar', k:'list', items:['Open a jar','Cut a steak','Put on a jacket','Tie a shoe','Phone, coffee, wrong pocket']},
+  {at:'Every tool I rely on', k:'keys', keys:['⌘','⇧','4'], label:'= THREE FINGERS'},
+  {at:'hunting and pecking', k:'big', text:'Left hand.\nLike it was 1994.', size:170},
+  {at:'a little stupid', k:'big', text:'A little stupid.\nThen angry.', size:170},
+  {at:'For a lot of people, this is just Tuesday', k:'quote', text:'For a lot of people, this is just Tuesday. Every day. Forever.'},
+ ],
+ '03':[
+  {at:'what surprised me wasn', k:'big', text:'What surprised me\nwas what happened next.', size:140},
+  {at:'I just started building', k:'big', text:'I just started\nbuilding.', size:220, accent:1},
+  {at:'Not a company', k:'trio', items:['Not a company.','Not a product.','Little fixes for my own life.']},
+  {at:'voice dictation', k:'big', text:'Talk.\nDon’t type.', size:220},
+  {at:'track the recovery', k:'chart'},
+  {at:'without touching anything', k:'big', text:'Say it.\nIt happens.', size:220},
+  {at:'None of it was hard', k:'quote', text:'One hand, talking to an AI, trying things, breaking things, trying again.'},
+  {at:'meat thing', k:'meat'},
+  {at:'That loop', k:'loop'},
+ ],
+ '04':[
+  {at:'Somewhere in those weeks', k:'quote', text:'Somewhere in those weeks, something became really obvious.'},
+  {at:'Voice is the front door to everything', k:'door'},
+  {at:'the keyboard was never the point', k:'big', text:'The keyboard was\nnever the point.', size:160},
+  {at:'led by the person', k:'big', text:'Not menus. Not forms.\nJust what I need.', size:140},
+  {at:'I was the use case', k:'big', text:'I was the\nuse case.', size:220, accent:1},
+ ],
+ '05':[
+  {at:'Here’s the part', k:'quote', text:'Here’s the part that matters for everyone in this room.'},
+  {at:'about half of American adults', k:'bars'},
+  {at:'as ordinary as owning a smartphone', k:'big', text:'As ordinary as\na smartphone.', size:180},
+  {at:'Let’s assume everybody has the tool', k:'big', text:'Assume everybody\nhas the tool.', size:180},
+  {at:'Think about what happened with phones', k:'big', text:'A camera in\nevery pocket.', size:180},
+  {at:'The tool spread out', k:'big', text:'The tool spread out.\nThe seeing didn’t.', size:150, accent:1},
+  {at:'the tool isn’t the difference', k:'big', text:'If everybody has the tool,\nthe tool isn’t the difference.', size:120},
+  {at:'So what is?', k:'big', text:'So what is?', size:240, accent:0},
+ ],
+ '06':[
+  {at:'The answer you usually hear', k:'stamp', word:'Taste.'},
+  {at:'I don’t think that’s it', k:'big', text:'I don’t think\nthat’s it.', size:200},
+  {at:'reassure ourselves', k:'quote', text:'Taste has become the thing creative people say to reassure ourselves.'},
+  {at:'pretty terrible taste', k:'big', text:'Terrible taste.\nIncredibly effective.', size:150},
+  {at:'backward looking', k:'big', text:'Taste looks\nbackward.', size:200},
+  {at:'looks a little wrong at first', k:'quote', text:'It looks a little wrong at first, until it doesn’t.'},
+  {at:'So I don’t think taste is the line', k:'stamp', word:'Taste.', struck:1},
+ ],
+ '07':[
+  {at:'intention, and repetition', k:'big', text:'Intention.\nRepetition.', size:220, accent:1},
+  {at:'Sometimes a piece of work comes together in an afternoon', k:'slider', from:0, to:.1},
+  {at:'other times it’s a thousand iterations', k:'slider', from:.1, to:1},
+  {at:'Both of those are real', k:'big', text:'Someone cared what it meant\nand kept going.', size:130},
+  {at:'The tools are amazing', k:'big', text:'More iterations, faster.', size:150},
+  {at:'What they can’t do', k:'big', text:'They can’t decide\nwhat you’re trying to say.', size:140, accent:1},
+ ],
+ '08':[
+  {at:'The same is true for the work we do with clients', k:'quote', text:'The same is true for the work we do with clients.'},
+  {at:'find the real problem', k:'big', text:'The real problem.\nNot the one in the brief.', size:140},
+  {at:'Here’s what’s changing', k:'big', text:'Polish stops being\nproof of anything.', size:160, accent:1},
+  {at:'Now a deck can be beautifully organized', k:'deck'},
+  {at:'The question isn’t, can we make it', k:'canshould'},
+  {at:'I’ll give you a small example', k:'grill'},
+  {at:'That’s point of view', k:'big', text:'You can’t fake it.\nYou can’t generate it.', size:150, accent:1},
+ ],
+ '09':[
+  {at:'the point of view comes from felt experience', k:'big', text:'Felt\nexperience.', size:240, accent:1},
+  {at:'A model can generate a thousand interfaces', k:'chat'},
+  {at:'It’s never felt the problem', k:'big', text:'It’s never felt\nthe problem.', size:190},
+  {at:'I had to feel the problem first', k:'big', text:'The building part: the tools.\nThe feeling part: mine.', size:120},
+  {at:'That’s the part that can’t be prompted', k:'big', text:'That’s the part that\ncan’t be prompted.', size:160, accent:1},
+ ],
+ '10':[
+  {at:'So here’s what I’d leave you with', k:'quote', text:'So here’s what I’d leave you with.'},
+  {at:'Speed is going to be cheap', k:'trio', items:['Speed: cheap.','Polish: cheap.','Looking finished: cheap.']},
+  {at:'What’s not going to be cheap', k:'big', text:'Knowing what matters,\nbecause you’ve lived it.', size:140, accent:1},
+  {at:'pay attention to the moments', k:'big', text:'When the world\ndoesn’t fit you,', size:170},
+  {at:'That’s information', k:'big', text:'that’s information.', size:200, accent:1},
+  {at:'My arm’s fine now', k:'quote', text:'My arm’s fine now, by the way. Mostly.'},
+  {at:'the best work starts with a real problem', k:'big', text:'A real problem,\nfelt by a real person.', size:150},
+  {at:'Thank you', k:'end'},
+ ],
+};
+
+// Resolve each beat to a start and end time from the sentence it names.
+const norm = s => s.replace(/[‘’]/g,"'").toLowerCase();
+const ALL = [];
+TL.scenes.forEach(sc => {
+  const list = BEATS[sc.id] || [];
+  const resolved = list.map(b => {
+    const s = sc.sentences.find(x => norm(x.text).includes(norm(b.at)));
+    if (!s) console.warn('beat not found', sc.id, b.at);
+    return {...b, t0: s ? s.t : sc.t};
+  }).sort((a,b) => a.t0 - b.t0);
+  resolved.forEach((b,i) => { b.t1 = i+1 < resolved.length ? resolved[i+1].t0 : sc.t + sc.dur; b.scene = sc; ALL.push(b); });
+});
+
+const $ = id => document.getElementById(id);
+const clamp = (v,a=0,b=1) => Math.max(a,Math.min(b,v));
+const ease = x => 1 - Math.pow(1 - clamp(x), 3);
+const fmt = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+function bigHTML(b, th){
+  const lines = b.text.split('\n');
+  return `<h2 class="big" style="font-size:${b.size||160}px">` + lines.map((l,i)=>
+    `<span class="ln" data-i="${i}" style="color:${b.accent!==undefined && i===lines.length-1 && b.accent ? th.acc : th.fg}">${esc(l)}</span>`).join('') + `</h2>`;
+}
+
+// Each kind builds its DOM once, then update(p, el, b, lt) animates it. p = 0..1 through the beat.
+const KINDS = {
+  big:{ build:(b,th)=>bigHTML(b,th), update:(el,lt)=>{ el.querySelectorAll('.ln').forEach((n,i)=>{const e=ease((lt-.12*i)/.7); n.style.opacity=e; n.style.transform=`translateY(${(1-e)*50}px)`;}); } },
+  quote:{ build:(b,th)=>`<p class="q" style="font-size:96px;line-height:1.12;margin:0;max-width:1500px;color:${th.acc};text-wrap:balance">${esc(b.text)}</p>`,
+    update:(el,lt)=>{const n=el.firstChild; const e=ease(lt/1); n.style.opacity=e; n.style.transform=`translateY(${(1-e)*30}px)`;} },
+  weeks:{ build:(b,th)=>`<h2 class="big" style="font-size:180px">6 to 8 weeks.</h2><div style="display:flex;gap:22px">${Array.from({length:8},(_,i)=>`<div class="wk" style="flex:1;height:140px;border:4px solid ${th.dim};border-radius:12px;display:flex;align-items:flex-end;padding:16px;box-sizing:border-box;font-family:var(--mono);font-size:26px;color:${th.dim}">WK ${i+1}</div>`).join('')}</div>`,
+    update:(el,lt,p,th)=>{el.querySelectorAll('.wk').forEach((n,i)=>{const on=lt>.6+i*.35; n.style.background=on?(i<6?th.xray||'#8FB4FF':'transparent'):'transparent'; n.style.borderColor=on?'#8FB4FF':th.dim; n.style.color=on&&i<6?'#12192B':th.dim;}); el.querySelector('h2').style.opacity=ease(lt/.6);} },
+  list:{ build:(b,th)=>`<div style="display:flex;flex-direction:column;gap:26px">${b.items.map(t=>`<div class="it" style="font-size:96px;font-weight:700;font-stretch:105%;position:relative;align-self:flex-start">${esc(t)}<span class="strike" style="position:absolute;left:-8px;top:54%;height:9px;background:${THEME.ink.acc};width:0"></span></div>`).join('')}</div>`,
+    update:(el,lt,p)=>{const its=el.querySelectorAll('.it'); its.forEach((n,i)=>{const s=i/its.length; n.style.opacity=ease((p-s*.8)*8); const w=clamp((p-s*.8-.08)*10); n.querySelector('.strike').style.width=`calc(${w*100}% + 16px)`;});} },
+  keys:{ build:(b,th)=>`<h2 class="big" style="font-size:130px">Every shortcut assumes\ntwo hands.</h2><div style="display:flex;gap:30px;align-items:center">${b.keys.map(k=>`<span class="key">${k}</span>`).join('')}<span class="mono" style="font-size:34px;color:${th.dim}">${b.label}</span></div>`,
+    update:(el,lt,p,th)=>{el.querySelector('h2').style.whiteSpace='pre-line'; el.querySelectorAll('.key').forEach((n,i)=>{const on=(lt*1.4)%3.6>i*.9 && (lt*1.4)%3.6<2.9; n.style.background=on?th.acc:'transparent'; n.style.color=on?th.bg:th.fg; n.style.borderColor=on?th.acc:th.fg; n.style.transform=on?'translateY(6px)':'none';});} },
+  trio:{ build:(b,th)=>`<div style="display:flex;flex-direction:column;gap:30px">${b.items.map((t,i)=>`<h2 class="big tr" style="font-size:150px;color:${i===b.items.length-1?th.acc:th.fg}">${esc(t)}</h2>`).join('')}</div>`,
+    update:(el,lt,p)=>{const n=el.querySelectorAll('.tr'); n.forEach((x,i)=>{const e=ease((p-i/n.length)*5); x.style.opacity=e; x.style.transform=`translateX(${(1-e)*-60}px)`;});} },
+  chart:{ build:(b,th)=>`<h2 class="big" style="font-size:130px">See the healing\nI was feeling.</h2><div style="display:flex;align-items:flex-end;gap:26px;height:330px;border-bottom:3px solid ${th.dim}">${['MON','TUE','WED','THU','FRI','SAT','SUN','MON','TUE','WED'].map(d=>`<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:10px"><div class="bar" style="background:#8FB4FF;border-radius:6px 6px 0 0;height:0"></div><span class="mono" style="font-size:20px;color:${th.dim};text-align:center">${d}</span></div>`).join('')}</div><span class="mono" style="font-size:24px;color:${th.dim}">RANGE OF MOTION, DEGREES</span>`,
+    update:(el,lt,p)=>{el.querySelector('h2').style.whiteSpace='pre-line'; const v=[22,25,24,31,35,34,42,48,55,63]; el.querySelectorAll('.bar').forEach((n,i)=>{n.style.height=(ease((lt-.4-i*.18)/.8)*v[i]/70*250)+'px';});} },
+  meat:{ build:(b,th)=>`<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:60px;align-items:center"><div class="mono" style="display:flex;flex-direction:column;gap:22px;font-size:56px;padding:56px;border:3px solid ${th.line};border-radius:20px"><span style="color:${th.dim};font-size:30px">YOU SAID</span><span>"meeting"</span><span style="color:${th.dim};font-size:30px">IT HEARD</span><span class="heard" style="color:${th.acc}"></span></div><h2 class="big" style="font-size:120px">Fix one thing.\nBreak two.\nTry again.</h2></div>`,
+    update:(el,lt)=>{const s='"meat thing"'; el.querySelector('.heard').textContent=s.slice(0,Math.floor(clamp((lt-.8)/1.2)*s.length)); const h=el.querySelector('h2'); h.style.whiteSpace='pre-line'; h.style.opacity=ease((lt-2)/.8);} },
+  loop:{ build:(b,th)=>`<div style="display:flex;gap:40px;justify-content:center;align-items:center">${['FEEL IT','BUILD IT','TRY IT','FIX IT'].map(t=>`<div class="lp" style="width:360px;height:360px;border-radius:50%;border:4px solid #8FB4FF;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:800;font-stretch:125%">${t}</div>`).join('')}</div><p class="q" style="font-size:64px;margin:0;text-align:center;color:${th.acc}">Faster than anything I’d done in my career.</p>`,
+    update:(el,lt,p,th)=>{const k=Math.floor(lt/0.8)%4; el.querySelectorAll('.lp').forEach((n,i)=>{const on=i===k; n.style.background=on?th.acc:'transparent'; n.style.borderColor=on?th.acc:'#8FB4FF'; n.style.color=on?th.bg:th.fg; n.style.transform=on?'scale(1.06)':'scale(1)';}); el.querySelector('.q').style.opacity=ease((lt-1.5)/1);} },
+  door:{ build:(b,th)=>`<div style="display:grid;grid-template-columns:520px minmax(0,1fr);gap:100px;align-items:center"><div style="height:680px;border:6px solid ${th.fg};border-radius:260px 260px 0 0;display:flex;align-items:center;justify-content:center;gap:10px;overflow:hidden;padding:0 40px">${Array.from({length:22},()=>`<i class="wv" style="display:block;width:10px;border-radius:5px;background:${th.acc}"></i>`).join('')}</div><h2 class="big" style="font-size:150px">Voice is the front door to everything.</h2></div>`,
+    update:(el,lt)=>{el.querySelectorAll('.wv').forEach((n,i)=>{const a=Math.abs(Math.sin(lt*3.1+i*.7))*.6+Math.abs(Math.sin(lt*1.7+i*1.9))*.4; n.style.height=(30+a*300*Math.sin(Math.PI*(i+.5)/22))+'px';}); el.querySelector('h2').style.opacity=ease((lt-.3)/.8);} },
+  bars:{ build:(b,th)=>`<div style="display:flex;flex-direction:column;gap:44px">${[['TWO YEARS AGO',1/3,'1 in 3',th.dim],['THIS YEAR',.5,'1 in 2',THEME.ink.acc]].map(r=>`<div style="display:flex;align-items:center;gap:40px"><span class="mono" style="width:300px;font-size:30px;color:${th.dim}">${r[0]}</span><div style="flex:1;height:110px;background:${th.line};border-radius:8px;overflow:hidden"><div class="fill" data-v="${r[1]}" style="height:100%;width:0;background:${r[3]}"></div></div><span style="width:280px;font-size:80px;font-weight:800;font-stretch:112%;font-variant-numeric:tabular-nums">${r[2]}</span></div>`).join('')}<span class="mono" style="font-size:24px;color:${th.dim}">AMERICAN ADULTS USING AI</span></div>`,
+    update:(el,lt)=>{el.querySelectorAll('.fill').forEach((n,i)=>{n.style.width=(ease((lt-.3-i*.9)/1.2)*n.dataset.v*100)+'%';});} },
+  stamp:{ build:(b,th)=>`<div style="position:relative;align-self:flex-start"><h2 class="big" style="font-size:360px;font-stretch:125%">${b.word}</h2><span class="sl" style="position:absolute;left:-20px;top:52%;height:26px;background:${th.acc};width:0"></span></div><p class="q" style="font-size:64px;margin:0;color:${th.acc}">${b.struck?'Not the line.':'The machines can make things. But we have taste.'}</p>`,
+    update:(el,lt,p,th,b)=>{const h=el.querySelector('h2'); const e=ease(lt/.35); h.style.transform=`scale(${1.25-.25*e})`; h.style.opacity=e; h.style.transformOrigin='left center'; el.querySelector('.sl').style.width=b.struck?`calc(${ease((lt-.8)/.6)*100}% + 40px)`:'0'; el.querySelector('.q').style.opacity=ease((lt-1)/.8);} },
+  slider:{ build:(b,th)=>`<h2 class="big hd" style="font-size:150px"></h2><div style="position:relative;height:120px;margin-top:40px"><div style="position:absolute;left:0;right:0;top:56px;height:8px;background:${th.line};border-radius:4px"></div><div class="fl" style="position:absolute;left:0;top:56px;height:8px;background:${th.acc};border-radius:4px"></div><div class="kn" style="position:absolute;top:20px;width:80px;height:80px;margin-left:-40px;border-radius:50%;background:${th.acc}"></div></div><div class="mono" style="display:flex;justify-content:space-between;font-size:32px;color:${th.dim}"><span>ONE AFTERNOON</span><span class="ct" style="color:${th.fg}"></span><span>1,000 ITERATIONS</span></div>`,
+    update:(el,lt,p,th,b)=>{const v=b.from+(b.to-b.from)*ease(p*1.4); el.querySelector('.kn').style.left=(v*100)+'%'; el.querySelector('.fl').style.width=(v*100)+'%'; el.querySelector('.ct').textContent=`DRAFT ${v<.1?1:Math.round(v*1000)}`; el.querySelector('.hd').textContent=v<.12?'Something urgent, said clearly.':'Draft after draft, until it clicks.';} },
+  deck:{ build:(b,th)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) 820px;gap:80px;align-items:center"><h2 class="big" style="font-size:120px">Beautifully organized.\nPitch perfect.\nNo heart.</h2><div style="position:relative;height:560px">${[0,1,2].map(i=>`<div class="sl" style="position:absolute;left:${80-i*40}px;top:${i*70}px;width:720px;height:405px;border-radius:16px;background:${i===2?'#E8EAEE':i===1?'#3A4466':'#2C3550'};color:#12192B;box-sizing:border-box;padding:46px;display:flex;flex-direction:column;justify-content:space-between">${i===2?`<span class="mono" style="font-size:20px;color:#5B6478">Q3 STRATEGY / ON BRAND</span><span style="font-size:56px;font-weight:800;font-stretch:112%;line-height:1">Unlocking synergies across the value chain</span><span class="hf" style="font-family:var(--quote);font-style:italic;font-size:34px;color:#8A4B05">Heart: not found.</span>`:''}</div>`).join('')}</div></div>`,
+    update:(el,lt)=>{const h=el.querySelector('h2'); h.style.whiteSpace='pre-line'; el.querySelectorAll('.sl').forEach((n,i)=>{const e=ease((lt-i*.25)/.7); n.style.opacity=e; n.style.transform=`translateY(${(1-e)*80}px)`;}); el.querySelector('.hf').style.opacity=ease((lt-2.5)/.6);} },
+  canshould:{ build:(b,th)=>`<div style="display:flex;flex-direction:column;gap:30px"><div style="position:relative;align-self:flex-start"><h2 class="big" style="font-size:220px;color:${th.dim}">Can we?</h2><span class="sl" style="position:absolute;left:-10px;top:50%;height:16px;background:${th.dim};width:0"></span></div><h2 class="big sh" style="font-size:220px;color:${th.acc}">Should we?</h2><p class="q pv" style="font-size:72px;margin:0;color:${th.fg}">And what’s the point of view?</p></div>`,
+    update:(el,lt)=>{el.querySelector('.sl').style.width=`calc(${ease((lt-1.5)/.6)*100}% + 20px)`; el.querySelector('.sh').style.opacity=ease((lt-3)/.6); el.querySelector('.pv').style.opacity=ease((lt-5)/.8);} },
+  grill:{ build:(b,th)=>`<span class="mono" style="font-size:30px;color:${th.dim}">GOWANUS, BROOKLYN / SUNDAYS, ALL SUMMER</span><h2 class="big" style="font-size:150px">No roof.\nA big grill.\nA lot of smoke.</h2><div class="smk" style="position:absolute;right:40px;bottom:0;width:520px;height:700px"></div>`,
+    build2:true,
+    update:(el,lt,p,th)=>{const h=el.querySelector('h2'); h.style.whiteSpace='pre-line'; const s=el.querySelector('.smk'); if(!s.childElementCount){for(let i=0;i<14;i++){const d=document.createElement('i');d.style.cssText='position:absolute;bottom:0;border-radius:50%;background:'+th.dim+';display:block';s.appendChild(d);}} [...s.children].forEach((d,i)=>{const ph=((lt*.12+i/14)%1); const r=40+ph*160; d.style.width=d.style.height=r+'px'; d.style.left=(200+Math.sin(i*2.3+lt*.6)*120*ph - r/2)+'px'; d.style.bottom=(ph*620)+'px'; d.style.opacity=(1-ph)*.16; d.style.filter='blur(24px)';});} },
+  chat:{ build:(b,th)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:80px;align-items:center"><div style="display:flex;flex-direction:column;gap:30px"><span class="clk" style="font-size:300px;font-weight:800;font-stretch:125%;line-height:.85;font-variant-numeric:tabular-nums">7:00</span><span class="mono" style="font-size:28px;color:${th.dim}">AM / ONE HAND / COFFEE IN THE OTHER</span></div><div style="display:flex;flex-direction:column;gap:30px"><span class="bub" style="align-self:flex-start;background:#FFFFFF;border-radius:40px 40px 40px 10px">are you still coming at 8?</span><span class="bub me" style="align-self:flex-end;background:${th.fg};color:${th.bg};border-radius:40px 40px 10px 40px;min-height:58px"></span></div></div>`,
+    update:(el,lt)=>{const steps=['y','ye','yes','yes ','yes o','yes on','yes on ','yes on m','yes on my','yes on my ','yes on my w','yes on my wy','yes on my wya','yes on my wya ','yes on my wya s','yes on my wya so','yes on my wya sor','yes on my wya sory']; const i=Math.floor(clamp((lt-1)/5)*steps.length); el.querySelector('.me').textContent=(steps[Math.min(i,steps.length-1)]||'')+(Math.floor(lt*2)%2?'|':' '); el.querySelector('.clk').textContent='7:0'+Math.min(9,Math.floor(lt/6));} },
+  end:{ build:(b,th)=>`<h2 class="big" style="font-size:170px">The part that\ncan’t be prompted.</h2><div style="display:flex;justify-content:space-between;align-items:baseline"><p class="q" style="font-size:72px;margin:0;color:${th.acc}">Thank you.</p><span class="mono" style="font-size:28px;color:${th.dim}">JUSTIN DURAZZO</span></div>`,
+    update:(el,lt)=>{const h=el.querySelector('h2'); h.style.whiteSpace='pre-line'; h.style.opacity=ease(lt/1); el.querySelector('.q').style.opacity=ease((lt-1)/1);} },
+};
+
+let curBeat=null, curEl=null, curSceneId=null;
+const stage=$('stage'), beatsEl=$('beats');
+
+function sceneAt(t){ return TL.scenes.find(s => t>=s.t && t<s.t+s.dur) || TL.scenes[TL.scenes.length-1]; }
+function beatAt(t){ let b=null; for(const x of ALL){ if(t>=x.t0) b=x; } return b; }
+
+function renderAt(t){
+  t=clamp(t,0,TOTAL-0.001);
+  const sc=sceneAt(t), th=THEME[SCENE_THEME[sc.id]], sp=t-sc.t;
+  // Scene change: new background wipes up from the bottom.
+  $('bgA').style.background=th.bg;
+  const prev=TL.scenes[TL.scenes.indexOf(sc)-1];
+  const wipe=ease(sp/.9);
+  $('bgB').style.background=prev?THEME[SCENE_THEME[prev.id]].bg:th.bg;
+  $('bgB').style.clipPath=`inset(0 0 ${wipe*100}% 0)`;
+  $('lab').textContent=`${sc.id} / ${sc.title.toUpperCase()}`; $('lab').style.color=th.dim;
+  $('tc').textContent=fmt(t); $('tc').style.color=th.dim;
+  const s=[...sc.sentences].reverse().find(x=>t>=x.t);
+  $('cap').textContent=s?s.text:''; $('cap').style.color=th.dim;
+  $('prog').style.width=(t/TOTAL*100)+'%';
+  const b=beatAt(t);
+  if(b!==curBeat){
+    curBeat=b; beatsEl.innerHTML='';
+    if(b){ const k=KINDS[b.k]; curEl=document.createElement('div'); curEl.className='beat'; curEl.style.color=th.fg; curEl.innerHTML=k.build(b,th); curEl.querySelectorAll('h2.big').forEach(h=>h.style.whiteSpace='pre-line'); beatsEl.appendChild(curEl); }
+  }
+  if(b&&curEl){
+    const lt=t-b.t0, dur=b.t1-b.t0, p=clamp(lt/dur);
+    KINDS[b.k].update(curEl,lt,p,th,b);
+    // Fade out in the last half second, after the scene wipe has had a beat to land.
+    curEl.style.opacity = 1-ease((lt-(dur-.5))/.5);
+    curEl.style.transform = `translateY(${-ease((lt-(dur-.5))/.5)*30}px)`;
+  }
+}
+window.renderAt=renderAt; window.TOTAL=TOTAL;
+
+// Fit the stage to its frame.
+function fit(){ const f=$('frame'); stage.style.transform=`scale(${f.clientWidth/1920})`; }
+window.addEventListener('resize',fit);
+
+const isRender = location.search.includes('render');
+if(isRender){ document.body.classList.add('render'); }
+fit();
+
+let playing=false, t=0, last=0;
+const play=$('play'), scrub=$('scrub'), clock=$('clock');
+scrub.max=TOTAL;
+function tick(now){ if(!playing) return; t+=(now-last)/1000; last=now; if(t>=TOTAL){t=TOTAL;playing=false;play.textContent='Play';} sync(); requestAnimationFrame(tick); }
+function sync(){ renderAt(t); scrub.value=t; clock.textContent=`${fmt(t)} / ${fmt(TOTAL)}`; }
+play.addEventListener('click',()=>{ playing=!playing; play.textContent=playing?'Pause':'Play'; if(playing){ if(t>=TOTAL) t=0; last=performance.now(); requestAnimationFrame(tick);} });
+scrub.addEventListener('input',()=>{ t=+scrub.value; sync(); });
+// Open on the title moment so the first frame reads.
+t = isRender ? 0 : 2.5; sync();
+document.fonts && document.fonts.ready.then(()=>{ curBeat=null; sync(); });
+</script>
