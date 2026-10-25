@@ -1,0 +1,281 @@
+<title>What Do U.S.E.E.?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a 1920x1080 stage scaled to fit. One idea on screen at a time, speaker chip and caption along the bottom,
+   lens tracker top right. Every entrance is a focus pull: blurry to sharp, like reading the next line of an eye chart. */
+@font-face{font-family:"Bricolage V";src:url(__F_BRIC__) format("woff2");font-weight:200 800;font-stretch:75% 100%}
+@font-face{font-family:"Atkinson L";font-weight:400;src:url(__F_ATK4__) format("woff2")}
+@font-face{font-family:"Atkinson L";font-weight:700;src:url(__F_ATK7__) format("woff2")}
+@font-face{font-family:"Atkinson L";font-weight:400;font-style:italic;src:url(__F_ATKI__) format("woff2")}
+@font-face{font-family:"Atkinson Mono L";font-weight:500;src:url(__F_MONO__) format("woff2")}
+:root{
+  --night:#0F1E33; --night-2:#1B2E4A; --paper:#F3F5F7; --paper-2:#E3E8EE; --ink:#0F1E33; --ink-dim:#566479; --on-night-dim:#9AA8BC;
+  --u:#3E84E6; --s:#2E9E63; --e1:#E8922A; --e2:#9A62E8; --act:#E5533D;
+  --display:"Bricolage V","Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --body:"Atkinson L","Atkinson Hyperlegible",Verdana,sans-serif;
+  --mono:"Atkinson Mono L","Atkinson Hyperlegible Mono",ui-monospace,Menlo,monospace;
+  --page:#0A1424; --page-fg:#F3F5F7;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--page);color:var(--page-fg);font-family:var(--body);margin:0;overflow:hidden;box-sizing:border-box;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.frame{position:relative;width:100%;max-width:min(100%,calc((100vh - 110px)*16/9));aspect-ratio:16/9;overflow:hidden;border-radius:8px}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:var(--paper)}
+.bg{position:absolute;inset:0}
+#tracker{position:absolute;right:110px;top:64px;display:flex;gap:14px;z-index:5;font-family:var(--display);font-weight:800;font-size:30px}
+#tracker span{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid currentColor;transition:none}
+#seclab{position:absolute;left:110px;top:76px;font-family:var(--mono);font-size:22px;letter-spacing:.14em;z-index:5}
+#foot{position:absolute;left:110px;right:110px;bottom:52px;display:flex;flex-direction:column;gap:14px;z-index:5}
+#who{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:22px;letter-spacing:.1em}
+#who i{display:block;width:16px;height:16px;border-radius:50%}
+#cap{font-family:var(--body);font-size:34px;line-height:1.3;max-width:1560px;min-height:88px}
+#prog{position:absolute;left:0;bottom:0;height:6px;z-index:6}
+.beat{position:absolute;left:110px;right:110px;top:150px;bottom:230px;display:flex;flex-direction:column;justify-content:center;gap:36px}
+.d{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:.95;margin:0;text-wrap:balance;font-stretch:100%}
+.ln{display:block}
+.m{font-family:var(--mono);letter-spacing:.1em}
+.card{border-radius:24px;padding:40px 44px;box-sizing:border-box}
+.row{display:flex;gap:32px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+.controls{display:flex;align-items:center;gap:14px;width:100%;max-width:min(100%,calc((100vh - 110px)*16/9));font-family:var(--mono);font-size:13px}
+.controls button{font:inherit;font-size:14px;min-width:88px;min-height:44px;border-radius:22px;border:1px solid var(--on-night-dim);background:transparent;color:var(--page-fg);cursor:pointer}
+.controls button:focus-visible,.controls input:focus-visible{outline:2px solid var(--e1);outline-offset:2px}
+.controls input{flex:1;min-width:0;accent-color:var(--e1)}
+.controls output{font-variant-numeric:tabular-nums;color:var(--on-night-dim);white-space:nowrap}
+body.render{padding:0;display:block}
+body.render .frame{max-width:none;width:1920px;height:1080px;border-radius:0}
+body.render .controls{display:none}
+@media (prefers-reduced-motion: reduce){ .focus{filter:none!important} }
+</style>
+
+<div class="frame" id="frame"><div id="stage">
+  <div class="bg" id="bgA"></div><div class="bg" id="bgB"></div>
+  <div id="seclab"></div>
+  <div id="tracker"><span>U</span><span>S</span><span>E</span><span>E</span></div>
+  <div id="beats"></div>
+  <div id="foot"><div id="who"><i></i><b></b></div><div id="cap"></div></div>
+  <div id="prog"></div>
+</div></div>
+<div class="controls">
+  <button id="play" type="button">Play</button>
+  <input id="scrub" type="range" min="0" max="800" step="0.1" value="0" aria-label="Position">
+  <output id="clock">0:00</output>
+</div>
+<audio id="vo" preload="auto"></audio>
+
+<script>
+const TL = __TIMELINE__;
+const TOTAL = TL.total;
+const C = {night:'#0F1E33',night2:'#1B2E4A',paper:'#F3F5F7',paper2:'#E3E8EE',ink:'#0F1E33',dim:'#566479',ndim:'#9AA8BC',u:'#3E84E6',s:'#2E9E63',e1:'#E8922A',e2:'#9A62E8',act:'#E5533D'};
+const LENS = [{l:'U',w:'Understanding',c:C.u,q:'Do I have the information?'},{l:'S',w:'Safety',c:C.s,q:'Is this safe?'},{l:'E',w:'Efficiency',c:C.e1,q:'Is this the best use of time, resources, and people?'},{l:'E',w:'Engagement',c:C.e2,q:'Will this strengthen my team?'}];
+// Which lens each section belongs to (-1 none, 4 all).
+const SEC_LENS = {'00':-1,'01':-1,'02':0,'03':1,'04':2,'05':3,'06':4,'07':4};
+const SPK = {JAMES:{n:'JAMES DURAZZO',r:'PRESENTER',c:C.u},SAFAA:{n:'CHEF SAFAA',r:'COOK AMBASSADOR',c:C.act},COOK:{n:'A COOK',r:'IN THE ROOM',c:C.s},'COOK 2':{n:'ANOTHER COOK',r:'IN THE ROOM',c:C.e2},NARRATOR:{n:'IN THE ROOM',r:'',c:C.dim}};
+
+// Beats: what fills the screen. `at` names the line that triggers it; dark:true puts it on night.
+const BEATS = [
+ {at:'Cooks arrive, sign in', k:'title', dark:1},
+ {at:'Good morning, everybody', k:'people'},
+ {at:'Today\'s session comes from a framework', k:'acronym', dark:1},
+ {at:'A few ground rules', k:'list', head:'Ground rules', items:['Have fun.','Listen to understand.','Share what you know.','Phones on vibrate.','Say it to the whole room.']},
+ {at:'So here\'s the question for today', k:'big', text:'How can I use U.S.E.E.\nto lead my kitchen better,\nevery single day?', size:110},
+ {at:'Every day, things come up', k:'lenses'},
+ {at:'By the end of today', k:'motto', dark:1},
+ {at:'Section one. Understanding', k:'section', lens:0, dark:1},
+ {at:'Understanding means knowing your team', k:'big', text:'Knowing what\'s happening.\nAnd what you can do about it.', size:110, color:C.u},
+ {at:'Because you can\'t spend your whole day', k:'buckets'},
+ {at:'The room splits into three groups', k:'groups'},
+ {at:'Our milk chest broke', k:'piles'},
+ {at:'that actually happened in my kitchen', k:'story', who:'CHEF SAFAA', text:'If it\'s already out of range, it doesn\'t matter where you move it.'},
+ {at:'And that\'s the whole point', k:'cost'},
+ {at:'Understanding doesn\'t mean waiting', k:'big', text:'Respond to the real problem.\nNot the first one you notice.', size:110, color:C.u},
+ {at:'I had a worker who was slow', k:'story', who:'CHEF SAFAA', text:'The slicer was dull, and he was afraid to say anything. One question changed everything.'},
+ {at:'Let\'s practice. Four scenarios', k:'four'},
+ {at:'That\'s right. Good leaders try to understand', k:'big', text:'Understand everything.\nBut when safety\'s on the line,\nact first.', size:110, color:C.act},
+ {at:'Section two. Safety', k:'section', lens:1, dark:1},
+ {at:'Understanding is where we start', k:'big', text:'When there\'s a hazard,\nsafety comes first.', size:130, color:C.s},
+ {at:'Safety means protecting', k:'three'},
+ {at:'For physical safety, every morning', k:'story', who:'CHEF SAFAA', text:'Every morning, I walk the floor. We fix it before anybody gets hurt.', tag:'PHYSICAL'},
+ {at:'For emotional safety', k:'story', who:'A COOK', text:'I don\'t yell in front of everybody. I pull them aside and we talk about it.', tag:'EMOTIONAL'},
+ {at:'And procedural. Filling out', k:'story', who:'A COOK', text:'Fill out the temp log every single day. Not on Friday for the whole week.', tag:'PROCEDURAL'},
+ {at:'Next, the safety scavenger hunt', k:'hunt'},
+ {at:'Look at how many there are', k:'big', text:'What has to be fixed right now?\nWhat\'s out of our control?', size:100},
+ {at:'Exactly. That\'s the Understanding lens', k:'why'},
+ {at:'After a short coffee break', k:'section', lens:2, dark:1},
+ {at:'We spent the morning finding hazards', k:'big', text:'Most safety problems start\nwhen something in the\noperation isn\'t working.', size:100, color:C.e1},
+ {at:'So, efficiency', k:'effdef'},
+ {at:'We look at it in four areas', k:'wheel'},
+ {at:'I\'ll go first. For me, it\'s time', k:'barrier', who:'CHEF SAFAA', area:'TIME', bar:'Deliveries land in the middle of prep.', act:'Prep the afternoon before on delivery days.'},
+ {at:'Mine\'s people', k:'barrier', who:'A COOK', area:'PEOPLE', bar:'Nobody is cross trained on the dish machine.', act:'Train two more people this month.'},
+ {at:'That\'s it. Efficiency isn\'t more work', k:'big', text:'Efficiency isn\'t more work.\nIt\'s making it easier\nto do the right work.', size:110, color:C.e1},
+ {at:'Lunch. Somebody else cooks', k:'section', lens:3, dark:1},
+ {at:'Okay, brain teaser', k:'teaser'},
+ {at:'Give yourselves a hand', k:'big', text:'The fun wasn\'t the riddles.\nIt was that everybody got to play.', size:100, color:C.e2},
+ {at:'Engagement means building a kitchen', k:'big', text:'Kitchens succeed\nbecause of people.', size:150, color:C.e2},
+ {at:'So here\'s the activity', k:'big', text:'One idea to get your staff, students,\nor school more involved\nin breakfast or lunch.', size:90},
+ {at:'My idea is a monthly student taste test', k:'story', who:'CHEF SAFAA', text:'A monthly student taste test. The kids vote on a new recipe before it goes on the menu.'},
+ {at:'Safaa, I love that', k:'affirm'},
+ {at:'That\'s engagement in action', k:'ownership'},
+ {at:'Two more tools. Recognition', k:'tools'},
+ {at:'My first manager thanked me', k:'story', who:'CHEF SAFAA', text:'My first manager thanked me by name, in front of the whole team. I still remember it.'},
+ {at:'Most of the time, appreciation', k:'big', text:'Appreciation isn\'t about awards.\nIt\'s about being seen.', size:110, color:C.e2},
+ {at:'And inclusion', k:'ask'},
+ {at:'The final section', k:'section', lens:4, dark:1},
+ {at:'So that\'s all four', k:'recap'},
+ {at:'So next time you\'re facing a decision', k:'checklist'},
+ {at:'Here\'s how this keeps going', k:'timeline'},
+ {at:'SMART means Specific', k:'smart'},
+ {at:'For the next fifteen minutes', k:'big', text:'Every goal, specific\nto every kitchen.', size:140},
+ {at:'Thank you all for learning', k:'thanks', dark:1},
+ {at:'And remember. Before you act', k:'motto', dark:1, end:1},
+];
+
+const norm = s => s.replace(/[‘’]/g,"'").toLowerCase();
+const LINES = TL.lines;
+const ALLB = [];
+let from = 0;
+BEATS.forEach(b => {
+  const i = LINES.findIndex((l,j) => j>=from && norm(l.text).includes(norm(b.at)));
+  if (i<0) { console.warn('beat not found', b.at); return; }
+  from = i; ALLB.push({...b, t0: LINES[i].t});
+});
+ALLB.forEach((b,i) => b.t1 = i+1<ALLB.length ? ALLB[i+1].t0 : TOTAL);
+
+const $ = id => document.getElementById(id);
+const clamp = (v,a=0,b=1) => Math.max(a,Math.min(b,v));
+const ease = x => 1 - Math.pow(1 - clamp(x), 3);
+const fmt = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+// The signature move: blurry to sharp.
+function focus(el, x, rise=24){ const e=ease(x); el.style.opacity=clamp(x*2.2); el.style.filter=`blur(${(1-e)*16}px)`; el.style.transform=`translateY(${(1-e)*rise}px)`; }
+function stagger(root, sel, lt, gap=.18, dur=.8, start=0){ root.querySelectorAll(sel).forEach((n,i)=>focus(n,(lt-start-i*gap)/dur)); }
+function bigText(text,size,col,fg){ const ls=text.split('\n'); return `<h2 class="d" style="font-size:${size}px">${ls.map((l,i)=>`<span class="ln f" style="color:${i===ls.length-1&&col?col:fg}">${esc(l)}</span>`).join('')}</h2>`; }
+function glasses(w, glint=1){ return `<svg width="${w}" height="${w*.36}" viewBox="0 0 500 180" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="14"><circle cx="135" cy="95" r="72"/><circle cx="365" cy="95" r="72"/><path d="M207 90 Q250 62 293 90"/><path d="M63 88 L20 70"/><path d="M437 88 L480 70"/></g>${glint?`<g stroke-width="8" stroke-linecap="round"><path d="M100 120 L150 70" stroke="${C.u}"/><path d="M120 128 L170 78" stroke="${C.e1}"/><path d="M330 120 L380 70" stroke="${C.s}"/><path d="M350 128 L400 78" stroke="${C.e2}"/></g>`:''}</svg>`; }
+
+const K = {
+ title:{ b:(b,th)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) 760px;gap:80px;align-items:center">
+   <div style="display:flex;flex-direction:column;gap:30px">
+     <div class="f" style="color:${C.paper}">${glasses(380)}</div>
+     <h1 class="d f" style="font-size:150px;color:${C.paper}">What Do<br>U.S.E.E.?</h1>
+     <p class="f m" style="margin:0;font-size:24px;color:${C.ndim}">KITCHEN LEADERSHIP PROFESSIONAL DEVELOPMENT</p></div>
+   <div class="chart" style="background:${C.paper};border-radius:20px;padding:40px 50px;display:flex;flex-direction:column;align-items:center;gap:14px;color:${C.ink};font-family:var(--display);font-weight:800">
+     ${[['W',120,C.ink],['H A T',96,C.ink],['D O &nbsp;U S E E',70,C.ink],['UNDERSTANDING',48,C.u],['SAFETY',48,C.s],['EFFICIENCY',48,C.e1],['ENGAGEMENT',48,C.e2]].map(r=>`<span class="cr" style="font-size:${r[1]}px;color:${r[2]};letter-spacing:.12em;line-height:1">${r[0]}</span>`).join('')}
+   </div></div>`,
+   u:(el,lt)=>{ stagger(el,'.f',lt,.3,.9); el.querySelectorAll('.cr').forEach((n,i)=>{const x=(lt-.6-i*.45)/1; const e=ease(x); n.style.opacity=clamp(x*2); n.style.filter=`blur(${(1-e)*22}px)`;}); } },
+ people:{ b:()=>`<div class="grid2">${[['James Durazzo','Professional Development Manager, Staten Island','Office of Food and Nutrition Services',C.u],['Chef Safaa','District Cook Ambassador','"I\'m a cook, just like all of you."',C.act]].map(p=>`<div class="card f" style="background:#fff;display:flex;flex-direction:column;gap:22px;min-height:440px;justify-content:flex-end;border-top:14px solid ${p[3]}"><span class="d" style="font-size:84px">${p[0]}</span><span style="font-size:36px;font-weight:700">${p[1]}</span><span style="font-size:30px;color:${C.dim}">${p[2]}</span></div>`).join('')}</div>`,
+   u:(el,lt)=>stagger(el,'.f',lt,.6,.9) },
+ acronym:{ b:()=>`<div class="grid4">${LENS.map(L=>`<div class="ac" style="display:flex;flex-direction:column;gap:20px"><span class="d" style="font-size:300px;color:${L.c};line-height:.8">${L.l}</span><span class="d w" style="font-size:52px;color:${C.paper}">${L.w}</span></div>`).join('')}</div><p class="f" style="margin:0;font-size:40px;color:${C.ndim};max-width:1400px">Four things every cook should look at before jumping in to fix whatever's happening in the kitchen.</p>`,
+   u:(el,lt)=>{ el.querySelectorAll('.ac').forEach((n,i)=>focus(n,(lt-i*.35)/.8)); el.querySelectorAll('.w').forEach((n,i)=>focus(n,(lt-2-i*.3)/.8,10)); focus(el.querySelector('p.f'),(lt-6)/1); } },
+ list:{ b:(b)=>`<span class="m f" style="font-size:26px;color:${C.dim}">${b.head.toUpperCase()}</span><div style="display:flex;flex-direction:column;gap:22px">${b.items.map((x,i)=>`<div class="f" style="display:flex;align-items:center;gap:30px"><span style="width:20px;height:20px;border-radius:50%;background:${[C.u,C.s,C.e1,C.e2,C.act][i%5]}"></span><span class="d" style="font-size:80px">${x}</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>{ const n=el.querySelectorAll('.f'); n.forEach((x,i)=>focus(x,(p*1.25-i/n.length)*n.length*.9)); } },
+ big:{ b:(b,th)=>bigText(b.text,b.size||120,b.color,th.fg), u:(el,lt)=>stagger(el,'.f',lt,.22,.8) },
+ lenses:{ b:()=>`<div class="grid2">${LENS.map(L=>`<div class="card f" style="background:#fff;display:flex;gap:30px;align-items:center"><span class="d" style="flex:none;width:120px;height:120px;border-radius:50%;background:${L.c};color:#fff;display:flex;align-items:center;justify-content:center;font-size:70px">${L.l}</span><span style="font-size:44px;font-weight:700;line-height:1.15">${['Do I understand what\'s actually going on?','Is it safe?','Is there a smarter way to do it?','How will this affect my team?'][LENS.indexOf(L)]}</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>stagger(el,'.f',lt,(p>0?(el._d||1):1)*1.6,.9) },
+ motto:{ b:(b)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center"><div class="f" style="color:${C.paper}">${glasses(460)}</div><p class="f m" style="margin:0;font-size:30px;color:${C.ndim}">BEFORE I ACT,</p><h2 class="d f" style="font-size:180px;color:${C.paper}">what do U.S.E.E.?</h2>${b.end?`<p class="f m" style="margin:0;font-size:24px;color:${C.ndim}">KITCHEN LEADERSHIP PROFESSIONAL DEVELOPMENT  /  JAMES DURAZZO WITH CHEF SAFAA</p>`:''}</div>`,
+   u:(el,lt)=>stagger(el,'.f',lt,.5,1) },
+ section:{ b:(b)=>{ const all=b.lens===4; const L=all?null:LENS[b.lens]; return `<span class="m f" style="font-size:28px;color:${C.ndim}">${all?'FINAL SECTION':'SECTION '+(b.lens+1)}</span>${all?`<div style="display:flex;gap:40px">${LENS.map(x=>`<span class="d f" style="font-size:280px;color:${x.c};line-height:.8">${x.l}</span>`).join('')}</div><h2 class="d f" style="font-size:120px;color:${C.paper}">Putting it together.</h2>`:`<h2 class="d f sw" style="font-size:240px;color:${C.paper}">${L.w}</h2><div class="bar" style="height:16px;width:0;background:${L.c};border-radius:8px"></div><p class="f" style="margin:0;font-size:44px;color:${C.ndim}">${L.q}</p>`}`; },
+   u:(el,lt)=>{ el.querySelectorAll('.f').forEach((n,i)=>{const x=(lt-i*.35)/1.1; const e=ease(x); n.style.opacity=clamp(x*2); n.style.filter=`blur(${(1-e)*30}px)`; n.style.letterSpacing=n.classList.contains('sw')?`${(1-e)*.2-.025}em`:'';}); const b=el.querySelector('.bar'); if(b) b.style.width=(ease((lt-.8)/1)*900)+'px'; } },
+ buckets:{ b:()=>`<div class="grid3">${[['CONTROL','What you own.','What can I do right now?',['Tasks','Workflow','Safety','Coaching'],C.s],['INFLUENCE','What you can help improve.','How can I make it better?',['Morale','Teamwork','Attitude','Focus'],C.e1],['COMMUNICATE','What you pass up the line.','Who needs to know?',['Staffing','Broken equipment','Deliveries','Participation'],C.u]].map(c=>`<div class="card f" style="background:#fff;display:flex;flex-direction:column;gap:18px;border-top:14px solid ${c[4]}"><span class="m" style="font-size:24px;color:${c[4]}">${c[0]}</span><span class="d" style="font-size:52px">${c[1]}</span><span style="font-size:30px;font-style:italic;color:${C.dim}">${c[2]}</span><div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px">${c[3].map(t=>`<span class="chip" style="font-size:26px;padding:10px 20px;border-radius:30px;background:${C.paper2}">${t}</span>`).join('')}</div></div>`).join('')}</div>`,
+   u:(el,lt,p)=>{ el.querySelectorAll('.card').forEach((n,i)=>focus(n,(p*3.2-i*.9)*1.2)); el.querySelectorAll('.chip').forEach((n,i)=>{ n.style.opacity=clamp((p*3.2-Math.floor(i/4)*.9-.4-(i%4)*.1)*3); }); } },
+ groups:{ b:()=>`<div class="grid3">${[['GROUP 1','Someone called out.','Lunch starts in 45 minutes.'],['GROUP 2','The milk chest breaks down.','In the middle of service.'],['GROUP 3','100 more students.','Just showed up for lunch.']].map((g,i)=>`<div class="card f" style="background:${C.night};color:${C.paper};min-height:460px;display:flex;flex-direction:column;justify-content:space-between"><span class="m" style="font-size:24px;color:${C.ndim}">${g[0]}</span><span class="d" style="font-size:62px">${g[1]}</span><span style="font-size:32px;color:${C.ndim}">${g[2]}</span></div>`).join('')}</div><div class="f m" style="font-size:26px;color:${C.dim}">SORT EVERY CHALLENGE CARD: CONTROL, INFLUENCE, OR COMMUNICATE.  /  10 MINUTES</div>`,
+   u:(el,lt,p)=>stagger(el,'.f',lt,(el._dur||10)/5,.9) },
+ piles:{ b:()=>`<span class="m f" style="font-size:26px;color:${C.dim}">GROUP 2  /  THE MILK CHEST</span><div class="grid3">${[['CONTROL','Pull the milk, move it to another fridge, and temp it.',C.s],['INFLUENCE','Keep everybody calm and focused.',C.e1],['COMMUNICATE','Report it to the manager. Write down what happened.',C.u]].map(c=>`<div class="card f" style="background:#fff;border-left:14px solid ${c[2]};display:flex;flex-direction:column;gap:20px;min-height:340px"><span class="m" style="font-size:24px;color:${c[2]}">${c[0]}</span><span style="font-size:42px;font-weight:700;line-height:1.2">${c[1]}</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>{ const n=el.querySelectorAll('.f'); n.forEach((x,i)=>focus(x,(p*1.4-i*.25)*4)); } },
+ story:{ b:(b)=>`${b.tag?`<span class="m f" style="font-size:26px;color:${{PHYSICAL:C.s,EMOTIONAL:C.e2,PROCEDURAL:C.u}[b.tag]}">${b.tag} SAFETY</span>`:''}<p class="f" style="margin:0;font-family:var(--body);font-style:italic;font-size:78px;line-height:1.15;max-width:1500px;text-wrap:balance">“${esc(b.text)}”</p><span class="m f" style="font-size:26px;color:${C.dim}">${b.who}</span>`,
+   u:(el,lt)=>stagger(el,'.f',lt,.3,.9) },
+ cost:{ b:()=>`${bigText('Acting on assumptions\ninstead of facts.',96,C.u,C.ink)}<div class="row" style="flex-wrap:wrap">${['Solve the wrong problem','Miss information','Stress people out','Put safety at risk'].map((t,i)=>`<span class="f" style="font-size:36px;font-weight:700;padding:20px 30px;border-radius:40px;background:${i===3?C.act:'#fff'};color:${i===3?'#fff':C.ink}">${t}</span>`).join('')}</div>`,
+   u:(el,lt,p)=>{ stagger(el,'.ln',lt,.2,.8); el.querySelectorAll('span.f').forEach((n,i)=>focus(n,(lt-2.5-i*1.2)/.8)); } },
+ four:{ b:()=>`<div class="grid4">${[['PREP','Someone is working really slowly.',0],['SERVING LINE','The line is backing up. Kids are waiting.',0],['HOLDING','Chicken is temping below holding temperature.',1],['DISH AREA','There\'s a wet floor by the dish machine.',1]].map(s=>`<div class="card f sc" data-hot="${s[2]}" style="background:#fff;min-height:440px;display:flex;flex-direction:column;justify-content:space-between;border:6px solid transparent"><span class="m" style="font-size:22px;color:${C.dim}">${s[0]}</span><span style="font-size:42px;font-weight:700;line-height:1.15">${s[1]}</span><span class="tag m" style="font-size:22px;color:#fff;background:${C.act};padding:10px 16px;border-radius:10px;align-self:flex-start;opacity:0">ACT NOW</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>{ el.querySelectorAll('.sc').forEach((n,i)=>{ focus(n,(lt-i*2.2)/.8); const hot=n.dataset.hot==='1', on=p>.72; n.style.borderColor=hot&&on?C.act:'transparent'; n.style.opacity=on&&!hot?.35:n.style.opacity; n.querySelector('.tag').style.opacity=hot&&on?1:0; }); } },
+ three:{ b:()=>`<div class="grid3">${[['PHYSICAL','A clean kitchen. Equipment used right. Food handled right.',C.s],['EMOTIONAL','Respectful talk. People feel supported.',C.e2],['PROCEDURAL','Policies, routines, and regulations, followed.',C.u]].map(c=>`<div class="card f" style="background:#fff;min-height:480px;display:flex;flex-direction:column;justify-content:space-between;border-top:14px solid ${c[2]}"><span class="d" style="font-size:64px;color:${c[2]}">${c[0][0]+c[0].slice(1).toLowerCase()}</span><span style="font-size:40px;font-weight:700;line-height:1.2">${c[1]}</span></div>`).join('')}</div><p class="f" style="margin:0;font-size:36px;color:${C.dim}">Protecting your staff, your students, and your food.</p>`,
+   u:(el,lt,p)=>{ focus(el.querySelector('p.f'),lt/.8); el.querySelectorAll('.card').forEach((n,i)=>focus(n,(p*3-.6-i*.75)*1.5)); } },
+ hunt:{ b:()=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) 520px;gap:60px;align-items:stretch">
+   <div class="card f" style="background:${C.night};position:relative;min-height:560px;overflow:hidden">
+     ${[[8,12,'Wet floor + running with pans',C.s],[48,24,'Blank temp log',C.u],[14,52,'"Ask your manager" allergen sign',C.u],[52,62,'"Hurry. Do more with less. Be perfect."',C.e2],[24,80,'Two people arguing',C.e2],[60,86,'Broken equipment',C.s]].map(h=>`<div class="hz" style="position:absolute;left:${h[0]}%;top:${h[1]}%;display:flex;align-items:center;gap:14px;transform:translateY(-50%)"><span style="width:64px;height:64px;border-radius:50%;border:7px solid ${h[3]};flex:none"></span><span style="font-size:30px;font-weight:700;color:${C.paper};background:${C.night2};padding:8px 16px;border-radius:10px">${h[2]}</span></div>`).join('')}
+   </div>
+   <div style="display:flex;flex-direction:column;justify-content:space-between">
+     <span class="m" style="font-size:26px;color:${C.dim}">SAFETY SCAVENGER HUNT</span>
+     <span class="d clk" style="font-size:200px;font-variant-numeric:tabular-nums">7:00</span>
+     <div style="display:flex;flex-direction:column;gap:14px;font-size:30px;font-weight:700">${[['Physical',C.s],['Procedural',C.u],['Emotional',C.e2]].map(x=>`<span style="display:flex;align-items:center;gap:14px"><i style="width:22px;height:22px;border-radius:50%;border:5px solid ${x[1]};display:block"></i>${x[0]}</span>`).join('')}</div>
+   </div></div>`,
+   u:(el,lt,p,b)=>{ focus(el.querySelector('.card'),lt/.8); const dur=b.t1-b.t0; el.querySelectorAll('.hz').forEach((n,i)=>{ const x=(p-.12-i*.13)*8; n.style.opacity=clamp(x); n.style.transform=`translateY(-50%) scale(${.6+.4*ease(x)})`;}); const left=Math.max(0,420-Math.floor(p*420)); el.querySelector('.clk').textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`; } },
+ why:{ b:()=>`<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;align-items:stretch">${[['SEE THE HAZARD','The wet floor.',C.dim],['SEE THE WHY','Rushing. Messy stations. Skipped steps. Nobody speaks up.',C.e1],['FIX THE WHY','So it doesn\'t come back tomorrow.',C.s]].map((c,i)=>`<div class="card f" style="background:${i===2?C.s:'#fff'};color:${i===2?'#fff':C.ink};min-height:400px;display:flex;flex-direction:column;justify-content:space-between"><span class="m" style="font-size:24px;color:${i===2?'#fff':c[2]}">${c[0]}</span><span class="d" style="font-size:56px">${c[1]}</span></div>`).join('')}</div><p class="f" style="margin:0;font-size:42px;font-weight:700">A safe kitchen is built by leaders who care, and teams who speak up.</p>`,
+   u:(el,lt,p)=>{ const n=el.querySelectorAll('.f'); n.forEach((x,i)=>focus(x,(p*1.3-.25-i*.2)*5)); } },
+ effdef:{ b:()=>`<div style="display:flex;flex-direction:column;gap:10px"><span class="d f st" style="font-size:100px;color:${C.dim};position:relative;align-self:flex-start">Not working faster.<i style="position:absolute;left:-6px;top:52%;height:10px;background:${C.act};display:block;width:0"></i></span><span class="d f st" style="font-size:100px;color:${C.dim};position:relative;align-self:flex-start">Not doing more with fewer people.<i style="position:absolute;left:-6px;top:52%;height:10px;background:${C.act};display:block;width:0"></i></span></div><p class="f" style="margin:0;font-size:56px;font-weight:700;line-height:1.2;max-width:1500px">The best result with the least wasted time, effort, food, and energy. <span style="color:${C.e1}">Without giving up safety or quality.</span></p>`,
+   u:(el,lt,p)=>{ const st=el.querySelectorAll('.st'); st.forEach((n,i)=>{ focus(n,(lt-.5-i*1.5)/.8); n.querySelector('i').style.width=`calc(${ease((lt-2-i*1.5)/.6)*100}% + 12px)`;}); focus(el.querySelector('p.f'),(p-.4)*6); } },
+ wheel:{ b:()=>`<div style="display:grid;grid-template-columns:620px minmax(0,1fr);gap:80px;align-items:center"><svg class="wh" viewBox="-310 -310 620 620" width="620" height="620" aria-hidden="true">${[['OPERATIONAL',-90],['RESOURCES',0],['TIME',90],['PEOPLE',180]].map((q,i)=>{const a0=(q[1]-45)*Math.PI/180,a1=(q[1]+45)*Math.PI/180,R=300,r=130; const p=`M${r*Math.cos(a0)} ${r*Math.sin(a0)} L${R*Math.cos(a0)} ${R*Math.sin(a0)} A${R} ${R} 0 0 1 ${R*Math.cos(a1)} ${R*Math.sin(a1)} L${r*Math.cos(a1)} ${r*Math.sin(a1)} A${r} ${r} 0 0 0 ${r*Math.cos(a0)} ${r*Math.sin(a0)}Z`; const am=q[1]*Math.PI/180; return `<g class="wq"><path d="${p}" fill="${[C.u,C.s,C.e1,C.e2][i]}" stroke="${C.paper}" stroke-width="10"/><text x="${215*Math.cos(am)}" y="${215*Math.sin(am)+10}" text-anchor="middle" fill="#fff" font-family="Atkinson Mono L, monospace" font-size="26" font-weight="500">${q[0]}</text></g>`;}).join('')}<circle r="120" fill="${C.night}"/><text y="12" text-anchor="middle" fill="#fff" font-family="Bricolage V, sans-serif" font-weight="800" font-size="40">EFFICIENCY</text></svg>
+   <div style="display:flex;flex-direction:column;gap:26px">${[['Operational','Is there an easier way to get the same result?',C.u],['Resources','Are we wasting food, supplies, or energy?',C.s],['Time','What should happen first?',C.e1],['People','Does everybody know what a good job looks like?',C.e2]].map(r=>`<div class="f" style="display:flex;flex-direction:column;gap:4px;border-left:10px solid ${r[2]};padding-left:24px"><span class="d" style="font-size:48px">${r[0]}</span><span style="font-size:30px;color:${C.dim}">${r[1]}</span></div>`).join('')}</div></div>`,
+   u:(el,lt,p)=>{ el.querySelectorAll('.wq').forEach((n,i)=>n.style.opacity=clamp((p*2.2-i*.25)*4)); el.querySelectorAll('.f').forEach((n,i)=>focus(n,(p*2.2-i*.25)*4)); } },
+ barrier:{ b:(b)=>`<span class="m f" style="font-size:26px;color:${C.e1}">BIGGEST BARRIER  /  ${b.area}</span><div class="grid2"><div class="card f" style="background:#fff;min-height:360px;display:flex;flex-direction:column;justify-content:space-between"><span class="m" style="font-size:24px;color:${C.dim}">THE BARRIER</span><span class="d" style="font-size:64px">${b.bar}</span></div><div class="card f" style="background:${C.e1};color:${C.ink};min-height:360px;display:flex;flex-direction:column;justify-content:space-between"><span class="m" style="font-size:24px">THE ACTION</span><span class="d" style="font-size:64px">${b.act}</span></div></div><span class="m f" style="font-size:24px;color:${C.dim}">${b.who}</span>`,
+   u:(el,lt,p)=>{ const n=el.querySelectorAll('.f'); n.forEach((x,i)=>focus(x,(p*1.3-i*.22)*5)); } },
+ teaser:{ b:()=>`<div style="display:flex;flex-direction:column;align-items:center;gap:50px;text-align:center"><span class="m f" style="font-size:26px;color:${C.e2}">BRAIN TEASER</span><h2 class="d f" style="font-size:110px">What has to be broken\nbefore you can use it?</h2><span class="d ans" style="font-size:200px;color:${C.e1}">An egg!</span></div>`,
+   u:(el,lt,p)=>{ el.querySelector('h2').style.whiteSpace='pre-line'; stagger(el,'.f',lt,.3,.8); const a=el.querySelector('.ans'); const x=(p-.5)*6; a.style.opacity=clamp(x); a.style.transform=`scale(${.5+.5*ease(x)}) rotate(${(1-ease(x))*-8}deg)`; } },
+ affirm:{ b:()=>`<span class="m f" style="font-size:26px;color:${C.e2}">HOW TO AFFIRM SOMEONE</span><div style="display:flex;flex-direction:column;gap:22px">${[['I heard you say','you want to run a monthly student taste test.'],['I think that\'s a great idea because','kids eat what they help choose.'],['It stands out to me because','it gives students a real voice.'],['I can\'t wait to see','how you put it in place.'],['If I can help,','just let me know.']].map(r=>`<div class="f" style="font-size:52px;line-height:1.2"><b style="color:${C.e2}">${r[0]}</b> ${r[1]}</div>`).join('')}</div>`,
+   u:(el,lt,p)=>{ const n=el.querySelectorAll('.f'); n.forEach((x,i)=>focus(x,(p*1.15-i*.17)*6)); } },
+ ownership:{ b:()=>`<div style="display:flex;flex-direction:column;gap:20px"><span class="d f st" style="font-size:120px;color:${C.dim};position:relative;align-self:flex-start">"That's not my job."<i style="position:absolute;left:-6px;top:52%;height:12px;background:${C.act};display:block;width:0"></i></span><span class="d f" style="font-size:120px;color:${C.e2}">"How can I help us win?"</span></div><p class="f" style="margin:0;font-size:52px;font-weight:700">People don't follow instructions. They follow a reason.</p>`,
+   u:(el,lt,p)=>{ const f=el.querySelectorAll('.f'); focus(f[0],(p-.15)*8); f[0].querySelector('i').style.width=`calc(${ease((p-.35)*8)*100}% + 12px)`; focus(f[1],(p-.45)*8); focus(f[2],(p-.65)*6); } },
+ tools:{ b:()=>`<div class="grid2">${[['RECOGNITION','Thank you is one of the most powerful things a leader can say.',C.e2],['INCLUSION','The best ideas come from the people doing the work.',C.e1]].map(c=>`<div class="card f" style="background:#fff;min-height:440px;display:flex;flex-direction:column;justify-content:space-between;border-top:14px solid ${c[2]}"><span class="m" style="font-size:26px;color:${c[2]}">${c[0]}</span><span class="d" style="font-size:66px">${c[1]}</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>stagger(el,'.f',lt,(el._dur||8)*.5,.9) },
+ ask:{ b:()=>`<span class="m f" style="font-size:26px;color:${C.e1}">SO ASK THEM</span>${['What do you think?','What are you seeing?','How would you fix it?'].map(q=>`<span class="d f" style="font-size:120px">${q}</span>`).join('')}`,
+   u:(el,lt,p)=>{ const n=el.querySelectorAll('.f'); focus(n[0],lt/.8); for(let i=1;i<n.length;i++) focus(n[i],(p-.4-(i-1)*.18)*6); } },
+ recap:{ b:()=>`<div class="grid4">${LENS.map((L,i)=>`<div class="card f" style="background:#fff;min-height:500px;display:flex;flex-direction:column;justify-content:space-between;border-top:14px solid ${L.c}"><span class="d" style="font-size:150px;color:${L.c};line-height:.8">${L.l}</span><span class="d" style="font-size:44px">${L.w}</span><span style="font-size:32px;color:${C.dim}">${['Helps you make good decisions.','Protects everyone.','Clears the way.','Keeps people giving their best.'][i]}</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>{ el.querySelectorAll('.f').forEach((n,i)=>focus(n,(p*1.3-i*.2)*5)); } },
+ checklist:{ b:()=>`<span class="m f" style="font-size:26px;color:${C.dim}">BEFORE YOU DECIDE, RUN IT THROUGH</span><div style="display:flex;flex-direction:column;gap:28px">${LENS.map(L=>`<div class="f" style="display:flex;align-items:center;gap:30px"><span class="bx" style="flex:none;width:72px;height:72px;border-radius:16px;border:6px solid ${L.c};display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:800;color:#fff"></span><span style="font-size:52px;font-weight:700">${L.q}</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>{ const n=el.querySelectorAll('.f'); focus(n[0],lt/.8); el.querySelectorAll('div.f').forEach((x,i)=>{ const t=p*1.2-.15-i*.2; focus(x,t*6); const bx=x.querySelector('.bx'); const on=t>.12; bx.style.background=on?LENS[i].c:'transparent'; bx.textContent=on?'✓':''; }); } },
+ timeline:{ b:()=>`<span class="m f" style="font-size:26px;color:${C.dim}">THE NEXT 30 DAYS</span><div style="position:relative;padding-top:60px"><div class="ln2" style="position:absolute;left:0;top:96px;height:10px;width:0;background:${C.night};border-radius:5px"></div><div class="grid3">${[['TODAY','Bring U.S.E.E. into your kitchen.'],['WITHIN 2 WEEKS','Pick one SMART goal. Your supervisor comes by to go over it.'],['30 DAYS','Check progress together. James follows up with every cook.']].map((s,i)=>`<div class="f" style="display:flex;flex-direction:column;gap:24px"><span style="width:82px;height:82px;border-radius:50%;background:${[C.u,C.e1,C.s][i]};border:10px solid ${C.paper};box-sizing:border-box"></span><span class="m" style="font-size:26px;color:${[C.u,C.e1,C.s][i]}">${s[0]}</span><span class="d" style="font-size:52px">${s[1]}</span></div>`).join('')}</div></div>`,
+   u:(el,lt,p)=>{ el.querySelector('.ln2').style.width=(ease(p*1.4)*100)+'%'; el.querySelectorAll('.f').forEach((n,i)=>focus(n,(p*1.4-i*.3)*4)); } },
+ smart:{ b:()=>`<div style="display:flex;flex-direction:column;gap:18px">${[['S','Specific','What will it change, and why does it matter?',C.u],['M','Measurable','How will you know you did it?',C.s],['A','Achievable','Can you do it with what you\'ve got?',C.e1],['R','Relevant','Does it help us feed kids?',C.e2],['T','Time bound','Start, finish, and check in. When?',C.act]].map(r=>`<div class="f" style="display:grid;grid-template-columns:120px 420px minmax(0,1fr);gap:30px;align-items:baseline"><span class="d" style="font-size:120px;color:${r[3]};line-height:.85">${r[0]}</span><span class="d" style="font-size:58px">${r[1]}</span><span style="font-size:38px;color:${C.dim}">${r[2]}</span></div>`).join('')}</div>`,
+   u:(el,lt,p)=>el.querySelectorAll('.f').forEach((n,i)=>focus(n,(p*1.2-i*.17)*6)) },
+ thanks:{ b:()=>`<h2 class="d f" style="font-size:150px;color:${C.paper}">Thank you for\nlearning with us.</h2><div class="row f" style="align-items:center;gap:40px"><div style="width:220px;height:220px;border-radius:24px;border:6px dashed ${C.ndim};display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--mono);font-size:22px;color:${C.ndim};padding:20px;box-sizing:border-box">FEEDBACK SURVEY QR CODE</div><p style="margin:0;font-size:44px;color:${C.ndim};max-width:900px">Scan before you head out. It really does help us get better.</p></div><p class="f" style="margin:0;font-size:44px;font-style:italic;color:${C.paper}">“I’m one of you. So reach out anytime.” <span class="m" style="font-style:normal;font-size:24px;color:${C.ndim}">CHEF SAFAA</span></p>`,
+   u:(el,lt,p)=>{ el.querySelector('h2').style.whiteSpace='pre-line'; const n=el.querySelectorAll('.f'); focus(n[0],lt/.9); focus(n[1],(lt-1)/.9); focus(n[2],(p-.68)*6); } },
+};
+
+let curB=null, curEl=null;
+const beatsEl=$('beats'), stage=$('stage');
+function lineAt(t){ let r=null; for(const l of LINES){ if(t>=l.t) r=l; else break; } return r; }
+function beatAt(t){ let r=ALLB[0]; for(const b of ALLB){ if(t>=b.t0) r=b; else break; } return r; }
+function secAt(t){ let r=TL.sections[0]; for(const s of TL.sections){ if(t>=s.t) r=s; else break; } return r; }
+
+function renderAt(t){
+  t=clamp(t,0,TOTAL-.001);
+  const b=beatAt(t), dark=!!b.dark, th=dark?{bg:C.night,fg:C.paper,dim:C.ndim}:{bg:C.paper,fg:C.ink,dim:C.dim};
+  // Background: when a beat flips between light and dark, the new ground wipes up from the bottom.
+  const i=ALLB.indexOf(b), prev=ALLB[i-1], prevDark=prev?!!prev.dark:dark;
+  $('bgA').style.background=th.bg;
+  $('bgB').style.background=prevDark?C.night:C.paper;
+  $('bgB').style.clipPath=`inset(0 0 ${ease((t-b.t0)/.8)*100}% 0)`;
+  const sec=secAt(t), li=SEC_LENS[sec.id];
+  $('seclab').textContent=sec.title.toUpperCase(); $('seclab').style.color=th.dim;
+  $('tracker').querySelectorAll('span').forEach((s,k)=>{ const on=li===4||k===li, done=li>k&&li!==4; s.style.color=on?LENS[k].c:(done?LENS[k].c:th.dim); s.style.background=on?LENS[k].c:'transparent'; s.style.borderColor=on||done?LENS[k].c:th.dim; s.style.opacity=on||done?1:.45; if(on){s.style.color='#fff';} });
+  const l=lineAt(t);
+  if(l){ const sp=SPK[l.spk]||SPK.NARRATOR; $('who').querySelector('i').style.background=sp.c; $('who').querySelector('b').textContent=sp.n+(sp.r?'  /  '+sp.r:''); $('who').style.color=th.dim; const ch=[...l.chunks].reverse().find(c=>t>=c.t)||l.chunks[0]; $('cap').textContent=ch.text; $('cap').style.color=th.fg; $('cap').style.fontStyle=l.spk==='NARRATOR'?'italic':'normal'; }
+  $('prog').style.width=(t/TOTAL*100)+'%'; $('prog').style.background=li>=0&&li<4?LENS[li].c:C.e1;
+  if(b!==curB){ curB=b; beatsEl.innerHTML=''; curEl=document.createElement('div'); curEl.className='beat'; curEl.style.color=th.fg; curEl.innerHTML=K[b.k].b(b,th); curEl._dur=b.t1-b.t0; curEl.querySelectorAll('h2.d').forEach(h=>h.style.whiteSpace='pre-line'); beatsEl.appendChild(curEl); }
+  const lt=t-b.t0, dur=b.t1-b.t0, p=clamp(lt/dur);
+  K[b.k].u(curEl,lt,p,b);
+  const out=ease((lt-(dur-.45))/.45);
+  curEl.style.opacity=1-out; curEl.style.filter=out>0?`blur(${out*12}px)`:'none';
+}
+window.renderAt=renderAt; window.TOTAL=TOTAL;
+
+function fit(){ stage.style.transform=`scale(${$('frame').clientWidth/1920})`; }
+window.addEventListener('resize',fit);
+const isRender=location.search.includes('render');
+if(isRender) document.body.classList.add('render');
+fit();
+
+const vo=$('vo'); if(TL.audio) vo.src=TL.audio;
+let playing=false, t=0, last=0;
+const play=$('play'), scrub=$('scrub'), clock=$('clock');
+scrub.max=TOTAL;
+function sync(){ renderAt(t); scrub.value=t; clock.textContent=`${fmt(t)} / ${fmt(TOTAL)}`; }
+function tick(now){ if(!playing) return; if(TL.audio&&!vo.paused){ t=vo.currentTime; } else { t+=(now-last)/1000; } last=now; if(t>=TOTAL){ t=TOTAL; playing=false; play.textContent='Play'; } sync(); requestAnimationFrame(tick); }
+play.addEventListener('click',()=>{ playing=!playing; play.textContent=playing?'Pause':'Play'; if(playing){ if(t>=TOTAL) t=0; last=performance.now(); if(TL.audio){ vo.currentTime=t; vo.play().catch(()=>{}); } requestAnimationFrame(tick);} else if(TL.audio){ vo.pause(); } });
+scrub.addEventListener('input',()=>{ t=+scrub.value; if(TL.audio) vo.currentTime=t; sync(); });
+t=isRender?0:4; sync();
+document.fonts&&document.fonts.ready.then(()=>{ curB=null; sync(); });
+</script>
